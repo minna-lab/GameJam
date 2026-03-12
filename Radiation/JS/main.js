@@ -1,6 +1,8 @@
-import { gameState, nextFloor, resetGame } from "./gameState.js"
+import { gameState, resetGame, nextFloor } from "./gameState.js"
 import { randomEvent, useObject, discardObject } from "./events.js"
-import { STORY, getFloorText } from "../data/story.js" // 🔗 connexion avec story.js (Scénariste)
+import { STORY, getFloorText } from "../data/story.js"
+import { getSceneByFloor, renderScene } from "./scenes.js"
+import { bindInteractionHandlers } from "./interactions.js"
 
 const homeScreen = document.getElementById("homeScreen")
 const settingsScreen = document.getElementById("settingsScreen")
@@ -93,71 +95,43 @@ function addLog(message) {
   logList.prepend(entry)
 }
 
-function getSceneByFloor(floor) {
-  if (floor <= 1) {
-    return {
-      image: "assets/images/hotel-lobby.jpg",
-      danger: "Zone instable"
-    }
-  }
-
-  if (floor <= 3) {
-    return {
-      image: "assets/images/hotel-corridor.jpg",
-      danger: "Radiation modérée"
-    }
-  }
-
-  if (floor <= 6) {
-    return {
-      image: "assets/images/lab-floor.jpg",
-      danger: "Radiation élevée"
-    }
-  }
-
-  return {
-    image: "assets/images/reactor-floor.jpg",
-    danger: "Zone critique"
-  }
-}
-
 function getItemVisual(event) {
   if (!event || event.type === "empty") {
     return {
-      image: "assets/images/item-shadow.png",
+      image: "asset/images/image 5.png",
       name: "Aucun objet",
-      description: "Le silence de la pièce est parfois plus inquiétant qu’un piège visible."
+      description: "Le silence de la piece est parfois plus inquietant qu'un piege visible."
     }
   }
 
-  if (event.name === "Objet rouillé") {
+  if (event.name === "Objet rouille") {
     return {
-      image: "assets/images/rusty-object.png",
-      name: "Objet rouillé",
-      description: "Un fragment métallique corrodé. Utile peut-être. Fatal sûrement."
+      image: "asset/images/image 2.png",
+      name: "Objet rouille",
+      description: "Un fragment metallique corrode. Utile peut-etre. Fatal surement."
     }
   }
 
-  if (event.name === "Trousse médicale") {
+  if (event.name === "Trousse medicale") {
     return {
-      image: "assets/images/medical-kit.png",
-      name: "Trousse médicale",
-      description: "Une promesse de survie enfermée dans une boîte vieillie par la contamination."
+      image: "asset/images/image 3.png",
+      name: "Trousse medicale",
+      description: "Une promesse de survie enfermee dans une boite vieillie par la contamination."
     }
   }
 
-  if (event.name === "Appareil électronique") {
+  if (event.name === "Appareil electronique") {
     return {
-      image: "assets/images/electronic-device.png",
-      name: "Appareil électronique",
-      description: "Un vestige expérimental encore traversé par un souffle électrique."
+      image: "asset/images/image 4.png",
+      name: "Appareil electronique",
+      description: "Un vestige experimental encore traverse par un souffle electrique."
     }
   }
 
   return {
-    image: "assets/images/item-shadow.png",
-    name: "Objet inconnu",
-    description: "Quelque chose attend dans la pénombre."
+    image: "asset/images/image 5.png",
+    name: event.name || "Objet inconnu",
+    description: event.text || "Quelque chose attend dans la penombre."
   }
 }
 
@@ -170,8 +144,7 @@ function setItemCard(event) {
 
 function updateScene() {
   const scene = getSceneByFloor(gameState.floor)
-  sceneImage.src = scene.image
-  dangerBadge.textContent = scene.danger
+  renderScene(sceneImage, dangerBadge, scene)
 }
 
 function updateHUD() {
@@ -190,11 +163,13 @@ function updateHUD() {
 }
 
 function setGameOver() {
-  sceneText.innerHTML = `<span class="game-over-text">Vous êtes morte. La tour garde ses réponses dans son ombre.</span>`
-  sceneImage.src = "assets/images/game-over.jpg"
-  itemImage.src = "assets/images/item-shadow.png"
+  const gameOverText = gameState.radiation >= 100 ? STORY.fin.radiation : STORY.fin.vie
+
+  sceneText.innerHTML = `<span class="game-over-text">${gameOverText}</span>`
+  sceneImage.src = "asset/images/image 5.png"
+  itemImage.src = "asset/images/image 5.png"
   itemName.textContent = "Fin de partie"
-  itemDescription.textContent = "Votre ascension s’arrête ici."
+  itemDescription.textContent = "Votre ascension s'arrete ici."
 
   exploreBtn.disabled = true
   useBtn.disabled = true
@@ -203,7 +178,7 @@ function setGameOver() {
   restartBtn.classList.remove("hidden")
 
   playSound(sfxGameOver)
-  addLog("Fin de partie : votre corps cède sous les blessures ou la contamination.")
+  addLog("Fin de partie : votre corps cede sous les blessures ou la contamination.")
 }
 
 function updateUI() {
@@ -227,10 +202,10 @@ function startNewGame() {
   discardBtn.disabled = true
   nextFloorBtn.disabled = false
 
-  sceneText.textContent = STORY.intro // 🔗 texte d'introduction depuis story.js
+  sceneText.textContent = STORY.intro
   setItemCard(null)
   updateUI()
-  addLog("Début de partie : entrée dans la tour.")
+  addLog("Debut de partie : entree dans la tour.")
 
   showScreen("game")
   startMusic()
@@ -289,129 +264,43 @@ sfxToggle.addEventListener("change", applyAudioSettings)
 musicVolume.addEventListener("input", applyAudioSettings)
 sfxVolume.addEventListener("input", applyAudioSettings)
 
-exploreBtn.addEventListener("click", () => {
-  if (gameState.gameOver) return
-
-  playSound(sfxClick)
-
-  currentEvent = randomEvent()
-  sceneText.textContent = currentEvent.text
-  sceneText.classList.add("glitch")
-  setTimeout(() => sceneText.classList.remove("glitch"), 500)
-
-  setItemCard(currentEvent)
-  addLog(`Étage ${gameState.floor} : ${currentEvent.text}`)
-
-  if (currentEvent.type === "object") {
-    useBtn.disabled = false
-    discardBtn.disabled = false
-  } else {
-    useBtn.disabled = true
-    discardBtn.disabled = true
+bindInteractionHandlers({
+  gameState,
+  buttons: {
+    exploreBtn,
+    useBtn,
+    discardBtn,
+    nextFloorBtn,
+    restartBtn
+  },
+  sceneText,
+  sounds: {
+    sfxClick,
+    sfxContamination,
+    sfxHeal,
+    sfxExplosion
+  },
+  dependencies: {
+    randomEvent,
+    useObject,
+    discardObject,
+    nextFloor,
+    getFloorText
+  },
+  helpers: {
+    playSound,
+    addLog,
+    setItemCard,
+    updateUI,
+    startNewGame
+  },
+  getCurrentEvent: () => currentEvent,
+  setCurrentEvent: (event) => {
+    currentEvent = event
   }
-
-  updateUI()
-})
-
-useBtn.addEventListener("click", () => {
-  if (!currentEvent || gameState.gameOver) return
-
-  playSound(sfxClick)
-
-  const result = useObject(currentEvent)
-  sceneText.textContent = result
-  addLog(result)
-
-  if (result.includes("contamin")) {
-    playSound(sfxContamination)
-  } else if (result.includes("Vie +")) {
-    playSound(sfxHeal)
-  } else if (result.includes("explose")) {
-    playSound(sfxExplosion)
-  }
-
-  currentEvent = null
-  useBtn.disabled = true
-  discardBtn.disabled = true
-  setItemCard(null)
-
-  updateUI()
-})
-
-discardBtn.addEventListener("click", () => {
-  if (!currentEvent || gameState.gameOver) return
-
-  playSound(sfxClick)
-
-  const result = discardObject()
-  sceneText.textContent = result
-  addLog(result)
-
-  currentEvent = null
-  useBtn.disabled = true
-  discardBtn.disabled = true
-  setItemCard(null)
-
-  updateUI()
-})
-
-nextFloorBtn.addEventListener("click", () => {
-  if (gameState.gameOver) return
-
-  playSound(sfxClick)
-
-  nextFloor()
-  currentEvent = null
-  sceneText.textContent = getFloorText(gameState.floor) // 🔗 texte de montée depuis story.js
-  addLog(`Vous montez à l’étage ${gameState.floor}. Le danger augmente.`)
-
-  useBtn.disabled = true
-  discardBtn.disabled = true
-  setItemCard(null)
-
-  updateUI()
-})
-
-restartBtn.addEventListener("click", () => {
-  playSound(sfxClick)
-  startNewGame()
 })
 
 applyAudioSettings()
 setItemCard(null)
 updateUI()
 showScreen("home")
-
-const rooms = [
-  "asset/images/image 1.png",
-  "asset/images/iamge 2.png",
-  "asset/images/image 3.png",
-  "asset/images/image 4.png",
-  "asset/images/image 5.png"
-]
-
-export function changeRoomImage(){
-
-  const randomIndex = Math.floor(Math.random() * rooms.length)
-
-  const roomImage = document.getElementById("roomImage")
-
-  roomImage.src = rooms[randomIndex]
-
-}
-
-import { changeRoomImage } from "./scenes.js"
-import { randomEvent } from "./events.js"
-import { nextFloor } from "./gameState.js"
-
-function enterRoom(){
-
-  nextFloor()
-
-  changeRoomImage()
-
-  const event = randomEvent()
-
-  console.log(event.text)
-
-}
