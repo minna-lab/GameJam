@@ -2,7 +2,14 @@
 
 import { gameState, damage, addRadiation, heal } from "./gameState.js"
 
-// générer un événement dans la pièce
+
+// ===============================
+// RANDOM EVENT GENERATOR
+// ===============================
+
+// 🟢 Called when the player enters a room.
+// It randomly generates something in the environment.
+
 export function randomEvent() {
 
   const rand = Math.random()
@@ -15,55 +22,77 @@ export function randomEvent() {
 
 }
 
-// objet rouillé
+
+// ===============================
+// OBJECT EVENTS
+// ===============================
+
+// 🟢 A random rusty object.
+
 function rustyObject() {
 
   return {
     type: "object",
-    name: "Objet rouillé",
-    text: "Vous trouvez un objet métallique rouillé sur le sol.",
+    name: "Rusty Object",
+    text: "You find a rusty metallic object on the ground.",
     contaminatedChance: contaminationChance()
   }
 
 }
 
-// trousse médicale
+
+// 🟢 A medical kit that can heal the player.
+
 function medicalKit() {
 
   return {
     type: "object",
-    name: "Trousse médicale",
-    text: "Une trousse médicale abandonnée.",
+    name: "Medical Kit",
+    text: "An abandoned medical kit lies on the floor.",
     heal: 20,
     contaminatedChance: contaminationChance() - 0.2
   }
 
 }
 
-// appareil électronique
+
+// 🟢 A strange electronic device that might explode.
+
 function electronicDevice() {
 
   return {
     type: "object",
-    name: "Appareil électronique",
-    text: "Un appareil électronique clignote faiblement.",
+    name: "Electronic Device",
+    text: "A strange electronic device is blinking.",
     damage: 15,
     contaminatedChance: contaminationChance() + 0.1
   }
 
 }
 
-// pièce vide
+
+// ===============================
+// EMPTY ROOM
+// ===============================
+
+// 🟢 Sometimes nothing happens.
+
 function emptyRoom() {
 
   return {
     type: "empty",
-    text: "La pièce est vide et silencieuse."
+    text: "The room is empty and silent."
   }
 
 }
 
-// difficulté progressive
+
+// ===============================
+// DIFFICULTY SCALING
+// ===============================
+
+// 🟢 The higher the floor, the more likely objects are contaminated.
+
 function contaminationChance() {
 
   let chance = 0.3 + (gameState.floor * 0.03)
@@ -73,10 +102,18 @@ function contaminationChance() {
   return chance
 }
 
-// interaction avec un objet
+
+// ===============================
+// OBJECT INTERACTION
+// ===============================
+
+// 🟢 Called when the player decides to USE the object.
+
 export function useObject(event) {
 
   const contaminated = Math.random() < event.contaminatedChance
+
+  // If the object is contaminated → radiation damage
 
   if (contaminated) {
 
@@ -84,30 +121,43 @@ export function useObject(event) {
 
     addRadiation(radiationGain)
 
-    return "L'objet est contaminé ! Radiation +" + radiationGain
+    return "The object is contaminated! Radiation +" + radiationGain
   }
+
+
+  // If the object heals the player
 
   if (event.heal) {
 
     heal(event.heal)
 
-    return "Vous utilisez la trousse médicale. Vie +" + event.heal
+    return "You use the medical kit. Health +" + event.heal
   }
+
+
+  // If the object causes damage
 
   if (event.damage) {
 
     damage(event.damage)
 
-    return "L'appareil explose ! Vie -" + event.damage
+    return "The device explodes! Health -" + event.damage
   }
 
-  return "L'objet ne fait rien."
+
+  return "Nothing happens."
 
 }
 
-// jeter l'objet
+
+// ===============================
+// DISCARD OBJECT
+// ===============================
+
+// 🟢 Called when the player decides to throw the object away.
+
 export function discardObject() {
 
-  return "Vous décidez de jeter l'objet."
+  return "You throw the object away."
 
 }
