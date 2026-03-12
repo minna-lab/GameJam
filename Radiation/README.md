@@ -16,7 +16,7 @@ La difficulté augmente à chaque étape
 -> objectifs 
 +survivre 
 +monter le plus haut possible
-+éviter les objests radioactifs
++éviter les objets radioactifs
 +comprendre ce qui s'est passé dans cet hôtel
 
 

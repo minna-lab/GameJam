@@ -1,4 +1,7 @@
-// gameState.js
+// GLOBAL GAME STATE
+
+// 🟢 This object stores the current state of the game.
+// Every system (events, UI, player actions) reads or modifies this state.
 
 export const gameState = {
   floor: 0,
@@ -8,25 +11,51 @@ export const gameState = {
   gameOver: false
 }
 
-// monter d'étage
+// FLOOR PROGRESSION
+
+// 🟢 Called when the player enters a new room or goes upstairs.
 export function nextFloor() {
   gameState.floor += 1
 }
 
-// perdre de la vie
+
+// DAMAGE SYSTEM
+
+// 🟢 Reduces player health when something dangerous happens.
 export function damage(amount) {
+
   gameState.health -= amount
+
+  if (gameState.health < 0) {
+    gameState.health = 0
+  }
+
   checkDeath()
 }
 
-// ajouter de la radiation
+
+// RADIATION SYSTEM
+
+
+// 🟢 Adds radiation when the player touches a contaminated object.
 export function addRadiation(amount) {
+
   gameState.radiation += amount
+
+  if (gameState.radiation > 100) {
+    gameState.radiation = 100
+  }
+
   checkDeath()
 }
 
-// soigner
+
+// HEAL SYSTEM
+
+
+// 🟢 Used when the player finds medical items.
 export function heal(amount) {
+
   gameState.health += amount
 
   if (gameState.health > 100) {
@@ -34,7 +63,13 @@ export function heal(amount) {
   }
 }
 
-// vérifier mort
+
+// DEATH CHECK
+
+
+// 🟢 This function verifies if the player died.
+// Death happens if health reaches 0 or radiation reaches 100.
+
 export function checkDeath() {
 
   if (gameState.health <= 0) {
@@ -49,7 +84,13 @@ export function checkDeath() {
 
 }
 
-// recommencer la partie
+
+
+// GAME RESET
+
+
+// 🟢 Used to restart the game.
+
 export function resetGame() {
 
   gameState.floor = 0
@@ -59,4 +100,3 @@ export function resetGame() {
   gameState.gameOver = false
 
 }
-
