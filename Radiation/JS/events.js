@@ -1,59 +1,35 @@
 // events.js
 
 import { gameState, damage, addRadiation, heal } from "./gameState.js"
+import { getRandomItem } from "../data/items.js" // 🔗 connexion avec items.js (Scénariste)
 
 // générer un événement dans la pièce
 export function randomEvent() {
 
   const rand = Math.random()
 
-  if (rand < 0.3) return rustyObject()
-  if (rand < 0.6) return medicalKit()
-  if (rand < 0.85) return electronicDevice()
+  // 🔗 on remplace rustyObject / medicalKit / electronicDevice
+  // par les objets du fichier items.js du scénariste
+  if (rand < 0.85) {
+    const item = getRandomItem()
+    return {
+      type: "object",
+      name: item.nom,
+      text: item.description,
+      heal: item.heal || 0,
+      damage: item.damage || 0,
+      radiation: item.radiation || 0,
+      contaminatedChance: item.contaminatedChance(gameState.floor),
+      trapText: item.trapText,
+      useText: item.useText
+    }
+  }
 
   return emptyRoom()
 
 }
 
-// objet rouillé
-function rustyObject() {
-
-  return {
-    type: "object",
-    name: "Objet rouillé",
-    text: "Vous trouvez un objet métallique rouillé sur le sol.",
-    contaminatedChance: contaminationChance()
-  }
-
-}
-
-// trousse médicale
-function medicalKit() {
-
-  return {
-    type: "object",
-    name: "Trousse médicale",
-    text: "Une trousse médicale abandonnée.",
-    heal: 20,
-    contaminatedChance: contaminationChance() - 0.2
-  }
-
-}
-
-// appareil électronique
-function electronicDevice() {
-
-  return {
-    type: "object",
-    name: "Appareil électronique",
-    text: "Un appareil électronique clignote faiblement.",
-    damage: 15,
-    contaminatedChance: contaminationChance() + 0.1
-  }
-
-}
-
-// pièce vide
+// pièce vide — inchangé
 function emptyRoom() {
 
   return {
@@ -63,7 +39,7 @@ function emptyRoom() {
 
 }
 
-// difficulté progressive
+// difficulté progressive — inchangé
 function contaminationChance() {
 
   let chance = 0.3 + (gameState.floor * 0.03)
@@ -73,39 +49,56 @@ function contaminationChance() {
   return chance
 }
 
-// interaction avec un objet
+// interaction avec un objet — légèrement modifié pour afficher
+// les textes narratifs du scénariste (trapText et useText)
 export function useObject(event) {
 
   const contaminated = Math.random() < event.contaminatedChance
 
+  // ☠ l'objet se retourne contre le joueur
   if (contaminated) {
 
     const radiationGain = 10 + gameState.floor
 
     addRadiation(radiationGain)
 
-    return "L'objet est contaminé ! Radiation +" + radiationGain
+    // affiche le texte du piège si disponible, sinon texte par défaut
+    return event.trapText || "L'objet est contaminé ! Radiation +" + radiationGain
+
   }
 
-  if (event.heal) {
+  // réduire la radiation (ex: capsules détox)
+  if (event.radiation < 0) {
+
+    addRadiation(event.radiation)
+
+    return event.useText || "Vous utilisez l'objet. Radiation " + event.radiation
+
+  }
+
+  // soigner
+  if (event.heal > 0) {
 
     heal(event.heal)
 
-    return "Vous utilisez la trousse médicale. Vie +" + event.heal
+    return event.useText || "Vous utilisez la trousse médicale. Vie +" + event.heal
+
   }
 
-  if (event.damage) {
+  // dégâts
+  if (event.damage > 0) {
 
     damage(event.damage)
 
-    return "L'appareil explose ! Vie -" + event.damage
+    return event.useText || "L'appareil explose ! Vie -" + event.damage
+
   }
 
-  return "L'objet ne fait rien."
+  return event.useText || "L'objet ne fait rien."
 
 }
 
-// jeter l'objet
+// jeter l'objet — inchangé
 export function discardObject() {
 
   return "Vous décidez de jeter l'objet."

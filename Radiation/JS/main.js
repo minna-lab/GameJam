@@ -1,5 +1,6 @@
 import { gameState, nextFloor, resetGame } from "./gameState.js"
 import { randomEvent, useObject, discardObject } from "./events.js"
+import { STORY, getFloorText } from "../data/story.js" // 🔗 connexion avec story.js (Scénariste)
 
 const homeScreen = document.getElementById("homeScreen")
 const settingsScreen = document.getElementById("settingsScreen")
@@ -226,7 +227,7 @@ function startNewGame() {
   discardBtn.disabled = true
   nextFloorBtn.disabled = false
 
-  sceneText.textContent = "Vous ouvrez les yeux dans la réception d’un hôtel silencieux. Quelque chose ici n’est pas mort. Quelque chose attend."
+  sceneText.textContent = STORY.intro // 🔗 texte d'introduction depuis story.js
   setItemCard(null)
   updateUI()
   addLog("Début de partie : entrée dans la tour.")
@@ -361,7 +362,7 @@ nextFloorBtn.addEventListener("click", () => {
 
   nextFloor()
   currentEvent = null
-  sceneText.textContent = `Vous atteignez l’étage ${gameState.floor}. L’air devient plus lourd, plus sale, presque vivant.`
+  sceneText.textContent = getFloorText(gameState.floor) // 🔗 texte de montée depuis story.js
   addLog(`Vous montez à l’étage ${gameState.floor}. Le danger augmente.`)
 
   useBtn.disabled = true
