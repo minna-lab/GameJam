@@ -380,3 +380,37 @@ applyAudioSettings()
 setItemCard(null)
 updateUI()
 showScreen("home")
+
+const rooms = [
+  "asset/images/image 1.png",
+  "asset/images/iamge 2.png",
+  "asset/images/image 3.png",
+  "asset/images/image 4.png",
+  "asset/images/image 5.png"
+]
+
+export function changeRoomImage(){
+
+  const randomIndex = Math.floor(Math.random() * rooms.length)
+
+  const roomImage = document.getElementById("roomImage")
+
+  roomImage.src = rooms[randomIndex]
+
+}
+
+import { changeRoomImage } from "./scenes.js"
+import { randomEvent } from "./events.js"
+import { nextFloor } from "./gameState.js"
+
+function enterRoom(){
+
+  nextFloor()
+
+  changeRoomImage()
+
+  const event = randomEvent()
+
+  console.log(event.text)
+
+}
