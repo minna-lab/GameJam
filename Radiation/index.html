@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radiation Tower</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+  <div class="bg-layer"></div>
+  <div class="bg-noise"></div>
+  <div class="bg-glow"></div>
+
+  <main class="app">
+    <!-- ===================== ACCUEIL ===================== -->
+    <section id="homeScreen" class="screen active">
+      <nav class="top-nav top-nav-home">
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <span>RADIATION TOWER</span>
+        </div>
+
+        <div class="nav-actions">
+          <button id="goSettingsFromHome" class="nav-btn">Paramètres</button>
+          <button id="goGameFromHome" class="nav-btn nav-btn-primary">Jouer</button>
+        </div>
+      </nav>
+
+      <div class="home-premium">
+        <div class="home-premium-left">
+          <p class="eyebrow">Survival Horror • Exploration • Catastrophe nucléaire • 2027</p>
+
+          <h1 class="home-title">
+            La tour ne dort pas.<br />
+            Elle attend.
+          </h1>
+
+          <p class="home-subtitle">
+            Une femme se réveille dans un hôtel abandonné après une catastrophe nucléaire.
+            Les étages supérieurs promettent des réponses, mais chaque porte ouverte
+            rapproche aussi de la contamination, de l’effondrement et de la vérité.
+          </p>
+
+          <div class="home-cta">
+            <button id="startGameBtn" class="btn btn-primary btn-xl">Entrer dans la tour</button>
+            <button id="openSettingsBtn" class="btn btn-ghost">Paramètres</button>
+          </div>
+
+          <div class="home-stats">
+            <div class="mini-card">
+              <span class="mini-card-number">∞</span>
+              <span class="mini-card-label">Survie sans fin</span>
+            </div>
+
+            <div class="mini-card">
+              <span class="mini-card-number">+</span>
+              <span class="mini-card-label">Danger croissant</span>
+            </div>
+
+            <div class="mini-card">
+              <span class="mini-card-number">01</span>
+              <span class="mini-card-label">Objectif : monter</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-premium-right">
+          <div class="tower-visual-card floating-card">
+            <div class="tower-visual-overlay"></div>
+
+            <div class="tower-visual-content">
+              <div class="signal-chip">
+                <span class="signal-dot"></span>
+                Signal faible détecté
+              </div>
+
+              <div class="tower-lines">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+
+              <div class="tower-caption">
+                <p class="tower-caption-small">NIVEAU D’ACCÈS</p>
+                <h2>Zone interdite</h2>
+                <p>
+                  L’hôtel servait de site d’expérimentation sur la résistance humaine aux radiations.
+                  Plus vous montez, plus le bâtiment cesse d’être un refuge… et devient un test.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-bottom-grid">
+        <article class="glass-card glass-card-large">
+          <p class="card-kicker">Synopsis</p>
+          <h3>Un piège vertical</h3>
+          <p>
+            L’environnement est votre premier ennemi. Les objets sont rares, les ressources sont douteuses,
+            et la tour devient de plus en plus hostile à mesure que vous grimpez.
+          </p>
+        </article>
+
+        <article class="glass-card">
+          <p class="card-kicker">Règle du jeu</p>
+          <h3>Chaque choix a un prix</h3>
+          <p>
+            Explorez, utilisez, jetez, montez. Gérer le risque est plus important que foncer.
+          </p>
+        </article>
+
+        <article class="glass-card">
+          <p class="card-kicker">Objectif</p>
+          <h3>Survivre et comprendre</h3>
+          <p>
+            Il n’y a pas de fin classique. Il faut tenir, avancer, et reconstituer l’histoire du lieu.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== PARAMETRES ===================== -->
+    <section id="settingsScreen" class="screen">
+      <nav class="top-nav">
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <span>RADIATION TOWER</span>
+        </div>
+
+        <div class="nav-actions">
+          <button id="backHomeBtn" class="nav-btn">Accueil</button>
+          <button id="startFromSettingsBtn" class="nav-btn nav-btn-primary">Lancer le jeu</button>
+        </div>
+      </nav>
+
+      <div class="settings-layout">
+        <div class="settings-panel">
+          <p class="eyebrow">Configuration</p>
+          <h2>Paramètres</h2>
+          <p class="settings-intro">
+            Ajustez l’ambiance avant d’ouvrir les portes de la tour.
+          </p>
+
+          <div class="settings-group">
+            <label class="setting-line">
+              <span>Musique d’ambiance</span>
+              <input type="checkbox" id="musicToggle" checked />
+            </label>
+
+            <label class="setting-line">
+              <span>Effets sonores</span>
+              <input type="checkbox" id="sfxToggle" checked />
+            </label>
+
+            <label class="setting-block">
+              <span>Volume musique</span>
+              <input type="range" id="musicVolume" min="0" max="1" step="0.1" value="0.4" />
+            </label>
+
+            <label class="setting-block">
+              <span>Volume effets</span>
+              <input type="range" id="sfxVolume" min="0" max="1" step="0.1" value="0.7" />
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-side floating-card">
+          <h3>Avant d’entrer</h3>
+          <p>
+            Le jeu ne cherche pas à vous récompenser. Il cherche à vous éprouver.
+            Chaque étage est plus hostile que le précédent.
+          </p>
+          <ul>
+            <li>Surveillez votre vie</li>
+            <li>Évitez les objets suspects</li>
+            <li>Montez seulement si vous êtes prête</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== JEU ===================== -->
+    <section id="gameScreen" class="screen">
+      <nav class="top-nav">
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <span>RADIATION TOWER</span>
+        </div>
+
+        <div class="nav-actions">
+          <button id="goSettingsFromGame" class="nav-btn">Paramètres</button>
+          <button id="quitToHomeBtn" class="nav-btn">Accueil</button>
+        </div>
+      </nav>
+
+      <div class="game-header">
+        <div>
+          <p class="eyebrow">Gameplay</p>
+          <h2>Ascension en zone contaminée</h2>
+        </div>
+      </div>
+
+      <section class="hud">
+        <div class="hud-card">
+          <span class="hud-label">Étage</span>
+          <span id="floorValue" class="hud-value">0</span>
+        </div>
+
+        <div class="hud-card">
+          <span class="hud-label">Vie</span>
+          <div class="bar">
+            <div id="healthBar" class="bar-fill health-fill"></div>
+          </div>
+          <span id="healthValue" class="hud-small">100 / 100</span>
+        </div>
+
+        <div class="hud-card">
+          <span class="hud-label">Radiation</span>
+          <div class="bar">
+            <div id="radiationBar" class="bar-fill radiation-fill"></div>
+          </div>
+          <span id="radiationValue" class="hud-small">0 / 100</span>
+        </div>
+      </section>
+
+      <section class="game-layout">
+        <div class="scene-area">
+          <div class="scene-frame">
+            <img id="sceneImage" src="assets/images/hotel-lobby.jpg" alt="Scène du jeu" />
+            <div id="dangerBadge" class="danger-badge">Zone instable</div>
+          </div>
+
+          <div class="narration-box">
+            <p id="sceneText">
+              Vous ouvrez les yeux dans la réception d’un hôtel silencieux.
+              La poussière flotte comme une cendre sacrée.
+              Quelque chose ici a survécu. Quelque chose vous attend.
+            </p>
+          </div>
+        </div>
+
+        <aside class="sidebar">
+          <div class="panel">
+            <h3>Objet rencontré</h3>
+            <div class="item-card">
+              <img id="itemImage" src="assets/images/item-shadow.png" alt="Objet trouvé" />
+              <div>
+                <h4 id="itemName">Aucun objet</h4>
+                <p id="itemDescription">
+                  Explorez une pièce pour découvrir ce qui s’y cache.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Actions</h3>
+            <div class="actions-grid">
+              <button id="exploreBtn" class="btn btn-primary">Explorer</button>
+              <button id="useBtn" class="btn btn-secondary" disabled>Utiliser</button>
+              <button id="discardBtn" class="btn btn-secondary" disabled>Jeter</button>
+              <button id="nextFloorBtn" class="btn btn-primary">Monter</button>
+              <button id="restartBtn" class="btn btn-danger hidden">Recommencer</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Journal de survie</h3>
+            <div id="logList" class="log-list"></div>
+          </div>
+        </aside>
+      </section>
+    </section>
+  </main>
+
+  <!-- AUDIO -->
+  <audio id="bgAmbience" loop>
+    <source src="assets/sounds/ambience.mp3" type="audio/mpeg" />
+  </audio>
+
+  <audio id="sfxClick">
+    <source src="assets/sounds/click.mp3" type="audio/mpeg" />
+  </audio>
+
+  <audio id="sfxContamination">
+    <source src="assets/sounds/contamination.mp3" type="audio/mpeg" />
+  </audio>
+
+  <audio id="sfxHeal">
+    <source src="assets/sounds/heal.mp3" type="audio/mpeg" />
+  </audio>
+
+  <audio id="sfxExplosion">
+    <source src="assets/sounds/explosion.mp3" type="audio/mpeg" />
+  </audio>
+
+  <audio id="sfxGameOver">
+    <source src="assets/sounds/game-over.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
+
+<div id="scene">
+
+  <img id="roomImage" src="" alt="room">
+
+</div>
