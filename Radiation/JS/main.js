@@ -1,4 +1,4 @@
-import { gameState, resetGame, nextFloor } from "./gameState.js"
+import { gameState, resetGame, nextFloor, getAmbientLight } from "./gameState.js"
 import { randomEvent, useObject, discardObject } from "./events.js"
 import { STORY, getFloorText } from "../data/story.js"
 import { getSceneByFloor, renderScene } from "./scenes.js"
@@ -145,6 +145,9 @@ function setItemCard(event) {
 function updateScene() {
   const scene = getSceneByFloor(gameState.floor)
   renderScene(sceneImage, dangerBadge, scene)
+
+  const brightness = getAmbientLight()
+  sceneImage.style.filter = `brightness(${brightness}) contrast(1.04)`
 }
 
 function updateHUD() {

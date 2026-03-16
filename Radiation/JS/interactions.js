@@ -112,10 +112,14 @@ export function bindInteractionHandlers(config) {
 
 		playSound(sfxClick)
 
-		nextFloor()
+		const zoneRadiation = nextFloor()
 		setCurrentEvent(null)
 		sceneText.textContent = getFloorText(gameState.floor)
 		addLog(`Vous montez a l'etage ${gameState.floor}. Le danger augmente.`)
+
+		if (zoneRadiation > 0) {
+			addLog(`Radiation de zone: +${zoneRadiation}. Total ${gameState.radiation}/100.`)
+		}
 
 		useBtn.disabled = true
 		discardBtn.disabled = true

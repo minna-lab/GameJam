@@ -19,12 +19,32 @@ export const gameState = {
 
 // FLOOR PROGRESSION
 
-export function nextFloor() {
+export function getZoneRadiation(floor) {
+  if (floor <= 1) {
+    return 2 // Faible
+  }
+  if (floor <= 3) {
+    return 5 // Modérée
+  }
+  if (floor <= 6) {
+    return 10 // Élevée
+  }
+  return 16 // Critique
+}
 
+export function nextFloor() {
   gameState.floor += 1
 
   // Score
   gameState.score += 100
+
+  // Radiation de zone à l’entrée de l’étage
+  const zoneRadiation = getZoneRadiation(gameState.floor)
+  if (zoneRadiation > 0) {
+    addRadiation(zoneRadiation)
+  }
+
+  return zoneRadiation
 }
 
 
@@ -57,6 +77,14 @@ export function addRadiation(amount) {
   }
 
   checkDeath()
+}
+
+export function getAmbientLight() {
+  // Plus la radiation est haute, plus l’éclairage de la scène baisse.
+  // 0 = sombre, 1 = normal. On garde un minimum pour la lisibilité.
+  const base = 1.0
+  const reduction = (gameState.radiation / 100) * 0.80
+  return Math.max(0.15, base - reduction)
 }
 
 
