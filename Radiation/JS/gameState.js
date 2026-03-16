@@ -103,4 +103,3 @@ export function resetGame() {
   gameState.inventory = []
   gameState.gameStarted = false
 }
-```
