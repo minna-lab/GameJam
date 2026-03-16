@@ -34,5 +34,6 @@ export function renderScene(sceneImageElement, dangerBadgeElement, scene) {
     if (!sceneImageElement || !dangerBadgeElement || !scene) return
 
     sceneImageElement.src = scene.image
+    
     dangerBadgeElement.textContent = scene.danger
 }

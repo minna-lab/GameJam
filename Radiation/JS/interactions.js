@@ -126,6 +126,8 @@ export function bindInteractionHandlers(config) {
 
 	restartBtn.addEventListener("click", () => {
 		playSound(sfxClick)
+		
 		startNewGame()
+
 	})
 }

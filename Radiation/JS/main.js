@@ -280,6 +280,7 @@ bindInteractionHandlers({
     sfxHeal,
     sfxExplosion
   },
+
   dependencies: {
     randomEvent,
     useObject,
