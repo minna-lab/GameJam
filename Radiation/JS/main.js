@@ -1,5 +1,5 @@
-import { gameState, resetGame, nextFloor, getAmbientLight } from "./gameState.js"
-import { randomEvent, useObject, discardObject } from "./events.js"
+import { gameState, resetGame, nextFloor, getAmbientLight, addToInventory } from "./gameState.js"
+import { randomEvent, useObject, discardObject, pickupObject } from "./events.js"
 import { STORY, getFloorText } from "../data/story.js"
 import { getSceneByFloor, renderScene } from "./scenes.js"
 import { bindInteractionHandlers } from "./interactions.js"
@@ -34,9 +34,15 @@ const itemDescription = document.getElementById("itemDescription")
 const exploreBtn = document.getElementById("exploreBtn")
 const useBtn = document.getElementById("useBtn")
 const discardBtn = document.getElementById("discardBtn")
+const inventoryBtn = document.getElementById("inventoryBtn")
+const openInventoryBtn = document.getElementById("openInventoryBtn")
+const inventoryPanel = document.getElementById("inventoryPanel")
+const inventoryList = document.getElementById("inventoryList")
+const closeInventoryBtn = document.getElementById("closeInventoryBtn")
 const nextFloorBtn = document.getElementById("nextFloorBtn")
 const restartBtn = document.getElementById("restartBtn")
 const logList = document.getElementById("logList")
+const roomItemArea = document.getElementById("roomItemArea")
 
 const musicToggle = document.getElementById("musicToggle")
 const sfxToggle = document.getElementById("sfxToggle")
@@ -93,6 +99,110 @@ function addLog(message) {
   entry.className = "log-entry"
   entry.textContent = message
   logList.prepend(entry)
+}
+
+function flashDamageEffect() {
+  const frame = document.querySelector('.scene-frame')
+  if (!frame) return
+  frame.classList.add('damage-flash')
+  setTimeout(() => frame.classList.remove('damage-flash'), 350)
+}
+
+function renderRoomItem(event) {
+  roomItemArea.innerHTML = ""
+
+  if (!event || event.type !== "object") {
+    roomItemArea.classList.remove("has-item")
+    roomItemArea.textContent = "Aucun objet disponible dans la pièce. Montez un étage pour en trouver."
+    return
+  }
+
+  roomItemArea.classList.add("has-item")
+
+  const card = document.createElement("div")
+  card.className = "room-item-card"
+  card.dataset.itemName = event.name
+
+  const img = document.createElement("img")
+  img.src = event.image || "asset/images/image 5.png"
+  img.alt = event.name || "Objet"
+
+  const info = document.createElement("div")
+  info.className = "room-item-info"
+  info.innerHTML = `<h4>${event.name || "Objet inconnu"}</h4><p>${event.text || ""}</p>`
+
+  card.appendChild(img)
+  card.appendChild(info)
+
+  card.addEventListener("click", () => {
+    setCurrentEvent(event)
+    setItemCard(event)
+    addLog(`Objet sélectionné : ${event.name}`)
+    useBtn.disabled = false
+    discardBtn.disabled = false
+    inventoryBtn.disabled = false
+  })
+
+  roomItemArea.appendChild(card)
+}
+
+function renderInventoryPanel() {
+  if (!inventoryList) return
+
+  if (gameState.inventory.length === 0) {
+    inventoryList.textContent = "Aucun objet dans l'inventaire."
+    return
+  }
+
+  inventoryList.innerHTML = ""
+
+  gameState.inventory.forEach((item, index) => {
+    const line = document.createElement("div")
+    line.className = "inventory-item"
+
+    const text = document.createElement("div")
+    text.innerHTML = `<h4>${item.name}</h4><p>${item.description || ""}</p>`
+
+    const controls = document.createElement("div")
+    controls.className = "inventory-actions"
+
+    const btnUse = document.createElement("button")
+    btnUse.className = "btn btn-secondary btn-sm"
+    btnUse.textContent = "Utiliser"
+    btnUse.addEventListener("click", () => {
+      const result = useObject(item)
+      sceneText.textContent = result
+      addLog(`Inventaire: utilisation de ${item.name}`)
+      gameState.inventory.splice(index, 1)
+      renderInventoryPanel()
+      updateUI()
+    })
+
+    const btnDiscard = document.createElement("button")
+    btnDiscard.className = "btn btn-secondary btn-sm"
+    btnDiscard.textContent = "Jeter"
+    btnDiscard.addEventListener("click", () => {
+      addLog(`Inventaire: ${item.name} jeté.`)
+      gameState.inventory.splice(index, 1)
+      renderInventoryPanel()
+    })
+
+    controls.appendChild(btnUse)
+    controls.appendChild(btnDiscard)
+    line.appendChild(text)
+    line.appendChild(controls)
+
+    inventoryList.appendChild(line)
+  })
+}
+
+function openInventory() {
+  inventoryPanel.classList.remove("hidden")
+  renderInventoryPanel()
+}
+
+function closeInventory() {
+  inventoryPanel.classList.add("hidden")
 }
 
 function getItemVisual(event) {
@@ -193,6 +303,21 @@ function updateUI() {
   }
 }
 
+function spawnNewRoom() {
+  const roomEvent = randomEvent()
+  currentEvent = roomEvent
+
+  setItemCard(roomEvent)
+  renderRoomItem(roomEvent)
+
+  useBtn.disabled = true
+  discardBtn.disabled = true
+  inventoryBtn.disabled = true
+
+  updateUI()
+  return roomEvent
+}
+
 function startNewGame() {
   resetGame()
   currentEvent = null
@@ -200,10 +325,9 @@ function startNewGame() {
   logList.innerHTML = ""
   restartBtn.classList.add("hidden")
 
-  exploreBtn.disabled = false
   useBtn.disabled = true
   discardBtn.disabled = true
-  nextFloorBtn.disabled = false
+  inventoryBtn.disabled = true
 
   sceneText.textContent = STORY.intro
   setItemCard(null)
@@ -212,6 +336,8 @@ function startNewGame() {
 
   showScreen("game")
   startMusic()
+
+  spawnNewRoom()
 }
 
 goGameFromHome.addEventListener("click", () => {
@@ -249,6 +375,16 @@ goSettingsFromGame.addEventListener("click", () => {
   showScreen("settings")
 })
 
+openInventoryBtn.addEventListener("click", () => {
+  playSound(sfxClick)
+  openInventory()
+})
+
+closeInventoryBtn.addEventListener("click", () => {
+  playSound(sfxClick)
+  closeInventory()
+})
+
 quitToHomeBtn.addEventListener("click", () => {
   playSound(sfxClick)
   showScreen("home")
@@ -273,6 +409,7 @@ bindInteractionHandlers({
     exploreBtn,
     useBtn,
     discardBtn,
+    inventoryBtn,
     nextFloorBtn,
     restartBtn
   },
@@ -295,6 +432,8 @@ bindInteractionHandlers({
     playSound,
     addLog,
     setItemCard,
+    renderRoomItem,
+    addToInventory,
     updateUI,
     startNewGame
   },

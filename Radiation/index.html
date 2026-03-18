@@ -257,11 +257,17 @@
           </div>
 
           <div class="panel">
-            <h3>Actions</h3>
+            <h3>Objets dans la pièce</h3>
+            <div id="roomItemArea" class="room-item-area">Aucun objet trouvé. Montez un étage pour découvrir.</div>
+          </div>
+
+          <div class="panel">
+            <h3>Options</h3>
             <div class="actions-grid">
-              <button id="exploreBtn" class="btn btn-primary">Explorer</button>
               <button id="useBtn" class="btn btn-secondary" disabled>Utiliser</button>
               <button id="discardBtn" class="btn btn-secondary" disabled>Jeter</button>
+              <button id="inventoryBtn" class="btn btn-secondary" disabled>Ajouter à l'inventaire</button>
+              <button id="openInventoryBtn" class="btn btn-secondary">Voir l'inventaire</button>
               <button id="nextFloorBtn" class="btn btn-primary">Monter</button>
               <button id="restartBtn" class="btn btn-danger hidden">Recommencer</button>
             </div>
@@ -301,12 +307,16 @@
     <source src="assets/sounds/game-over.mp3" type="audio/mpeg" />
   </audio>
 
+  <div id="inventoryPanel" class="inventory-panel hidden">
+    <div class="inventory-content">
+      <div class="inventory-header">
+        <h3>Inventaire</h3>
+        <button id="closeInventoryBtn" class="btn btn-ghost">Fermer</button>
+      </div>
+      <div id="inventoryList" class="inventory-list">Aucun objet dans l'inventaire.</div>
+    </div>
+  </div>
+
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
-
-<div id="scene">
-
-  <img id="roomImage" src="" alt="room">
-
-</div>

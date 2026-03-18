@@ -481,6 +481,13 @@ body {
   background: rgba(255, 255, 255, 0.08);
 }
 
+.btn-sm {
+  min-width: 70px;
+  min-height: 30px;
+  padding: 6px 8px;
+  font-size: 0.74rem;
+}
+
 /* GAME */
 .game-header {
   margin-bottom: 18px;
@@ -552,11 +559,77 @@ body {
   gap: 16px;
 }
 
+.room-item-area {
+  min-height: 120px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(10, 13, 10, 0.3);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #dde3d7;
+}
+
+.room-item-area.has-item {
+  justify-content: flex-start;
+}
+
+.room-item-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(215,255,99,0.2);
+  cursor: pointer;
+}
+
+.room-item-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 14px rgba(215,255,99,0.5);
+}
+
+.room-item-card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.room-item-info h4 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.room-item-info p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #c9d3c4;
+}
+
 .scene-frame {
   position: relative;
   overflow: hidden;
   min-height: 620px;
   background: var(--panel-strong);
+}
+
+.scene-frame.damage-flash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 3px solid rgba(255, 0, 0, 0.8);
+  box-shadow: 0 0 24px rgba(255, 0, 0, 0.6);
+  pointer-events: none;
+  animation: damageFlash 0.35s ease;
+}
+
+@keyframes damageFlash {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 .scene-frame img {
@@ -659,6 +732,77 @@ body {
   color: #ff9f9f;
   font-weight: bold;
   font-size: 1.1rem;
+}
+
+.inventory-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px;
+}
+
+.inventory-panel.hidden {
+  display: none;
+}
+
+.inventory-content {
+  width: min(760px, 95%);
+  background: rgba(10, 13, 10, 0.92);
+  border: 1px solid rgba(215, 255, 99, 0.26);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 23px rgba(0, 0, 0, 0.55);
+}
+
+.inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.inventory-header h3 {
+  margin: 0;
+  color: var(--toxic);
+}
+
+.inventory-list {
+  display: grid;
+  gap: 10px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.inventory-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.37);
+  border: 1px solid rgba(215, 255, 99, 0.12);
+}
+
+.inventory-item h4 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.inventory-item p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #cde0c1;
+}
+
+.inventory-actions {
+  display: flex;
+  gap: 8px;
 }
 
 /* RESPONSIVE */

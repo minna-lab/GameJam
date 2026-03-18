@@ -119,6 +119,20 @@ export function checkDeath() {
 
 // GAME RESET
 
+export function addToInventory(item) {
+  if (!item) return false
+
+  gameState.inventory.push({
+    name: item.name || "Objet inconnu",
+    description: item.text || "",
+    heal: item.heal || 0,
+    damage: item.damage || 0,
+    radiation: item.radiation || 0
+  })
+
+  return true
+}
+
 export function resetGame() {
 
   gameState.floor = 0

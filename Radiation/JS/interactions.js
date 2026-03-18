@@ -11,9 +11,9 @@ export function bindInteractionHandlers(config) {
 	} = config
 
 	const {
-		exploreBtn,
 		useBtn,
 		discardBtn,
+		inventoryBtn,
 		nextFloorBtn,
 		restartBtn
 	} = buttons
@@ -37,31 +37,13 @@ export function bindInteractionHandlers(config) {
 		playSound,
 		addLog,
 		setItemCard,
+		renderRoomItem,
+		addToInventory,
 		updateUI,
 		startNewGame
 	} = helpers
 
-	exploreBtn.addEventListener("click", () => {
-		if (gameState.gameOver) return
 
-		playSound(sfxClick)
-
-		const event = randomEvent()
-		setCurrentEvent(event)
-
-		sceneText.textContent = event.text
-		sceneText.classList.add("glitch")
-		setTimeout(() => sceneText.classList.remove("glitch"), 500)
-
-		setItemCard(event)
-		addLog(`Etage ${gameState.floor} : ${event.text}`)
-
-		const foundObject = event.type === "object"
-		useBtn.disabled = !foundObject
-		discardBtn.disabled = !foundObject
-
-		updateUI()
-	})
 
 	useBtn.addEventListener("click", () => {
 		const currentEvent = getCurrentEvent()
@@ -77,6 +59,9 @@ export function bindInteractionHandlers(config) {
 			playSound(sfxContamination)
 		} else if (result.includes("Vie +")) {
 			playSound(sfxHeal)
+		} else if (result.includes("Vie -") || result.toLowerCase().includes("dégâts") || result.toLowerCase().includes("degats")) {
+			playSound(sfxExplosion)
+			flashDamageEffect()
 		} else if (result.includes("explose")) {
 			playSound(sfxExplosion)
 		}
@@ -84,7 +69,9 @@ export function bindInteractionHandlers(config) {
 		setCurrentEvent(null)
 		useBtn.disabled = true
 		discardBtn.disabled = true
+		inventoryBtn.disabled = true
 		setItemCard(null)
+		renderRoomItem(null)
 
 		updateUI()
 	})
@@ -102,7 +89,34 @@ export function bindInteractionHandlers(config) {
 		setCurrentEvent(null)
 		useBtn.disabled = true
 		discardBtn.disabled = true
+		inventoryBtn.disabled = true
 		setItemCard(null)
+		renderRoomItem(null)
+
+		updateUI()
+	})
+
+	inventoryBtn.addEventListener("click", () => {
+		const currentEvent = getCurrentEvent()
+		if (!currentEvent || gameState.gameOver) return
+
+		playSound(sfxClick)
+
+		const result = addToInventory(currentEvent)
+		if (result) {
+			sceneText.textContent = "Objet mis dans l'inventaire."
+			addLog(`Inventaire: ${currentEvent.name} ajouté.`)
+		} else {
+			sceneText.textContent = "Echec de l'inventaire."
+			addLog("Impossible d'ajouter à l'inventaire.")
+		}
+
+		setCurrentEvent(null)
+		useBtn.disabled = true
+		discardBtn.disabled = true
+		inventoryBtn.disabled = true
+		setItemCard(null)
+		renderRoomItem(null)
 
 		updateUI()
 	})
@@ -113,17 +127,18 @@ export function bindInteractionHandlers(config) {
 		playSound(sfxClick)
 
 		const zoneRadiation = nextFloor()
-		setCurrentEvent(null)
+		const nextItem = randomEvent()
+		setCurrentEvent(nextItem)
+
 		sceneText.textContent = getFloorText(gameState.floor)
 		addLog(`Vous montez a l'etage ${gameState.floor}. Le danger augmente.`)
-
-		if (zoneRadiation > 0) {
-			addLog(`Radiation de zone: +${zoneRadiation}. Total ${gameState.radiation}/100.`)
-		}
+		addLog(`Radiation de zone: +${zoneRadiation}. Total ${gameState.radiation}/100.`)
 
 		useBtn.disabled = true
 		discardBtn.disabled = true
-		setItemCard(null)
+		inventoryBtn.disabled = true
+		setItemCard(nextItem)
+		renderRoomItem(nextItem)
 
 		updateUI()
 	})

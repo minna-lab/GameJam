@@ -94,3 +94,12 @@ export function useObject(event) {
 export function discardObject() {
   return "Vous jetez l'objet."
 }
+
+// pickup item in room
+export function pickupObject(event) {
+  if (!event || event.type !== "object") {
+    return "Il n'y a rien d'utile à ramasser."
+  }
+
+  return "Objet ajouté à l'inventaire."
+}
