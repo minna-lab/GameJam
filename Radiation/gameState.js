@@ -1,147 +1,62 @@
+// ☢ HORIZON — audio.js
+// Moteur audio Web Audio API — sons procéduraux distincts
 
-// GLOBAL GAME STATE
+const Audio = (() => {
+  let ctx = null;
+  let geigerInterval = null;
+  let geigerVol = 0.6;
+  let ambientVol = 0.3;
+  let enabled = true;
 
-export const gameState = {
-  floor: 0,
-  health: 100,
-  radiation: 0,
-
-
-  alive: true,
-  gameOver: false,
-
-
-  score: 0,
-  inventory: [],
-  gameStarted: false
-}
-
-
-// FLOOR PROGRESSION
-
-export function getZoneRadiation(floor) {
-  if (floor <= 1) {
-    return 2 // Faible
+  function init() {
+    try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
   }
-  if (floor <= 3) {
-    return 5 // Modérée
-  }
-  if (floor <= 6) {
-    return 10 // Élevée
-  }
-  return 16 // Critique
-}
+  function resume() { if (ctx && ctx.state === 'suspended') ctx.resume(); }
+  function dest() { return ctx && ctx.destination; }
 
-export function nextFloor() {
-  gameState.floor += 1
-
-  // Score
-  gameState.score += 100
-
-  // Radiation de zone à l’entrée de l’étage
-  const zoneRadiation = getZoneRadiation(gameState.floor)
-  if (zoneRadiation > 0) {
-    addRadiation(zoneRadiation)
+  // ── Primitives ──────────────────────────────────────────────────────────
+  function osc(freq, dur, vol, type='sine', detune=0, delay=0) {
+    if (!ctx || !enabled) return;
+    try {
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(dest());
+      o.type=type; o.frequency.setValueAtTime(freq, ctx.currentTime+delay);
+      if(detune) o.detune.value=detune;
+      g.gain.setValueAtTime(0, ctx.currentTime+delay);
+      g.gain.linearRampToValueAtTime(vol, ctx.currentTime+delay+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+delay+dur);
+      o.start(ctx.currentTime+delay); o.stop(ctx.currentTime+delay+dur+0.05);
+    } catch(e) {}
   }
 
-  return zoneRadiation
-}
-
-
-// DAMAGE SYSTEM
-
-export function damage(amount) {
-
-  gameState.health -= amount
-
-  if (gameState.health < 0) {
-    gameState.health = 0
+  function sweep(f0, f1, dur, vol, type='sine', delay=0) {
+    if (!ctx || !enabled) return;
+    try {
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(dest());
+      o.type=type;
+      o.frequency.setValueAtTime(f0, ctx.currentTime+delay);
+      o.frequency.exponentialRampToValueAtTime(f1, ctx.currentTime+delay+dur);
+      g.gain.setValueAtTime(vol, ctx.currentTime+delay);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+delay+dur);
+      o.start(ctx.currentTime+delay); o.stop(ctx.currentTime+delay+dur+0.05);
+    } catch(e) {}
   }
 
-  checkDeath()
-}
-
-
-// RADIATION SYSTEM
-
-export function addRadiation(amount) {
-
-  gameState.radiation += amount
-
-  if (gameState.radiation > 100) {
-    gameState.radiation = 100
+  function noise(dur, vol, center=2000, q=2, delay=0) {
+    if (!ctx || !enabled) return;
+    try {
+      const len=Math.floor(ctx.sampleRate*dur);
+      const buf=ctx.createBuffer(1,len,ctx.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len);
+      const src=ctx.createBufferSource(), g=ctx.createGain();
+      const f=ctx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=center; f.Q.value=q;
+      src.buffer=buf; src.connect(f); f.connect(g); g.connect(dest());
+      g.gain.setValueAtTime(vol, ctx.currentTime+delay);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+delay+dur);
+      src.start(ctx.currentTime+delay);
+    } catch(e) {}
   }
 
-  if (gameState.radiation < 0) {
-    gameState.radiation = 0
-  }
-
-  checkDeath()
-}
-
-export function getAmbientLight() {
-  // Plus la radiation est haute, plus l’éclairage de la scène baisse.
-  // 0 = sombre, 1 = normal. On garde un minimum pour la lisibilité.
-  const base = 1.0
-  const reduction = (gameState.radiation / 100) * 0.80
-  return Math.max(0.15, base - reduction)
-}
-
-
-// HEAL SYSTEM
-
-export function heal(amount) {
-
-  gameState.health += amount
-
-  if (gameState.health > 100) {
-    gameState.health = 100
-  }
-}
-
-
-// DEATH CHECK
-
-export function checkDeath() {
-
-  if (gameState.health <= 0) {
-    gameState.alive = false
-    gameState.gameOver = true
-  }
-
-  if (gameState.radiation >= 100) {
-    gameState.alive = false
-    gameState.gameOver = true
-  }
-
-}
-
-
-// GAME RESET
-
-export function addToInventory(item) {
-  if (!item) return false
-
-  gameState.inventory.push({
-    name: item.name || "Objet inconnu",
-    description: item.text || "",
-    heal: item.heal || 0,
-    damage: item.damage || 0,
-    radiation: item.radiation || 0
-  })
-
-  return true
-}
-
-export function resetGame() {
-
-  gameState.floor = 0
-  gameState.health = 100
-  gameState.radiation = 0
-  gameState.alive = true
-  gameState.gameOver = false
-
-  gameState.score = 0
-  gameState.inventory = []
-  gameState.gameStarted = false
-}
+  
