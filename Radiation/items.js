@@ -39,7 +39,8 @@
 
 
 // ============================================================
-//  LISTE DES OBJETS
+//  LISTE DES OBjets
+
 //  Chaque objet a exactement les champs attendus par events.js :
 //  - nom            → currentEvent.name → itemName
 //  - description    → currentEvent.text → sceneText (quand exploré)
