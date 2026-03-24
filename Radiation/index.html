@@ -1,322 +1,553 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Radiation Tower</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/animations.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>☢ HORIZON — Nothing is Safe</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;700&family=Libre+Baskerville:ital@1&family=Barlow+Condensed:wght@300;600;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="animations.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="bg-layer"></div>
-  <div class="bg-noise"></div>
-  <div class="bg-glow"></div>
 
-  <main class="app">
-    <!-- ===================== ACCUEIL ===================== -->
-    <section id="homeScreen" class="screen active">
-      <nav class="top-nav top-nav-home">
-        <div class="brand">
-          <span class="brand-mark"></span>
-          <span>RADIATION TOWER</span>
-        </div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
 
-        <div class="nav-actions">
-          <button id="goSettingsFromHome" class="nav-btn">Paramètres</button>
-          <button id="goGameFromHome" class="nav-btn nav-btn-primary">Jouer</button>
-        </div>
-      </nav>
-
-      <div class="home-premium">
-        <div class="home-premium-left">
-          <p class="eyebrow">Survival Horror • Exploration • Catastrophe nucléaire • 2027</p>
-
-          <h1 class="home-title">
-            La tour ne dort pas.<br />
-            Elle attend.
-          </h1>
-
-          <p class="home-subtitle">
-            Une femme se réveille dans un hôtel abandonné après une catastrophe nucléaire.
-            Les étages supérieurs promettent des réponses, mais chaque porte ouverte
-            rapproche aussi de la contamination, de l’effondrement et de la vérité.
-          </p>
-
-          <div class="home-cta">
-            <button id="startGameBtn" class="btn btn-primary btn-xl">Entrer dans la tour</button>
-            <button id="openSettingsBtn" class="btn btn-ghost">Paramètres</button>
-          </div>
-
-          <div class="home-stats">
-            <div class="mini-card">
-              <span class="mini-card-number">∞</span>
-              <span class="mini-card-label">Survie sans fin</span>
-            </div>
-
-            <div class="mini-card">
-              <span class="mini-card-number">+</span>
-              <span class="mini-card-label">Danger croissant</span>
-            </div>
-
-            <div class="mini-card">
-              <span class="mini-card-number">01</span>
-              <span class="mini-card-label">Objectif : monter</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="home-premium-right">
-          <div class="tower-visual-card floating-card">
-            <div class="tower-visual-overlay"></div>
-
-            <div class="tower-visual-content">
-              <div class="signal-chip">
-                <span class="signal-dot"></span>
-                Signal faible détecté
-              </div>
-
-              <div class="tower-lines">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-
-              <div class="tower-caption">
-                <p class="tower-caption-small">NIVEAU D’ACCÈS</p>
-                <h2>Zone interdite</h2>
-                <p>
-                  L’hôtel servait de site d’expérimentation sur la résistance humaine aux radiations.
-                  Plus vous montez, plus le bâtiment cesse d’être un refuge… et devient un test.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="home-bottom-grid">
-        <article class="glass-card glass-card-large">
-          <p class="card-kicker">Synopsis</p>
-          <h3>Un piège vertical</h3>
-          <p>
-            L’environnement est votre premier ennemi. Les objets sont rares, les ressources sont douteuses,
-            et la tour devient de plus en plus hostile à mesure que vous grimpez.
-          </p>
-        </article>
-
-        <article class="glass-card">
-          <p class="card-kicker">Règle du jeu</p>
-          <h3>Chaque choix a un prix</h3>
-          <p>
-            Explorez, utilisez, jetez, montez. Gérer le risque est plus important que foncer.
-          </p>
-        </article>
-
-        <article class="glass-card">
-          <p class="card-kicker">Objectif</p>
-          <h3>Survivre et comprendre</h3>
-          <p>
-            Il n’y a pas de fin classique. Il faut tenir, avancer, et reconstituer l’histoire du lieu.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <!-- ===================== PARAMETRES ===================== -->
-    <section id="settingsScreen" class="screen">
-      <nav class="top-nav">
-        <div class="brand">
-          <span class="brand-mark"></span>
-          <span>RADIATION TOWER</span>
-        </div>
-
-        <div class="nav-actions">
-          <button id="backHomeBtn" class="nav-btn">Accueil</button>
-          <button id="startFromSettingsBtn" class="nav-btn nav-btn-primary">Lancer le jeu</button>
-        </div>
-      </nav>
-
-      <div class="settings-layout">
-        <div class="settings-panel">
-          <p class="eyebrow">Configuration</p>
-          <h2>Paramètres</h2>
-          <p class="settings-intro">
-            Ajustez l’ambiance avant d’ouvrir les portes de la tour.
-          </p>
-
-          <div class="settings-group">
-            <label class="setting-line">
-              <span>Musique d’ambiance</span>
-              <input type="checkbox" id="musicToggle" checked />
-            </label>
-
-            <label class="setting-line">
-              <span>Effets sonores</span>
-              <input type="checkbox" id="sfxToggle" checked />
-            </label>
-
-            <label class="setting-block">
-              <span>Volume musique</span>
-              <input type="range" id="musicVolume" min="0" max="1" step="0.1" value="0.4" />
-            </label>
-
-            <label class="setting-block">
-              <span>Volume effets</span>
-              <input type="range" id="sfxVolume" min="0" max="1" step="0.1" value="0.7" />
-            </label>
-          </div>
-        </div>
-
-        <div class="settings-side floating-card">
-          <h3>Avant d’entrer</h3>
-          <p>
-            Le jeu ne cherche pas à vous récompenser. Il cherche à vous éprouver.
-            Chaque étage est plus hostile que le précédent.
-          </p>
-          <ul>
-            <li>Surveillez votre vie</li>
-            <li>Évitez les objets suspects</li>
-            <li>Montez seulement si vous êtes prête</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== JEU ===================== -->
-    <section id="gameScreen" class="screen">
-      <nav class="top-nav">
-        <div class="brand">
-          <span class="brand-mark"></span>
-          <span>RADIATION TOWER</span>
-        </div>
-
-        <div class="nav-actions">
-          <button id="goSettingsFromGame" class="nav-btn">Paramètres</button>
-          <button id="quitToHomeBtn" class="nav-btn">Accueil</button>
-        </div>
-      </nav>
-
-      <div class="game-header">
-        <div>
-          <p class="eyebrow">Gameplay</p>
-          <h2>Ascension en zone contaminée</h2>
-        </div>
-      </div>
-
-      <section class="hud">
-        <div class="hud-card">
-          <span class="hud-label">Étage</span>
-          <span id="floorValue" class="hud-value">0</span>
-        </div>
-
-        <div class="hud-card">
-          <span class="hud-label">Vie</span>
-          <div class="bar">
-            <div id="healthBar" class="bar-fill health-fill"></div>
-          </div>
-          <span id="healthValue" class="hud-small">100 / 100</span>
-        </div>
-
-        <div class="hud-card">
-          <span class="hud-label">Radiation</span>
-          <div class="bar">
-            <div id="radiationBar" class="bar-fill radiation-fill"></div>
-          </div>
-          <span id="radiationValue" class="hud-small">0 / 100</span>
-        </div>
-      </section>
-
-      <section class="game-layout">
-        <div class="scene-area">
-          <div class="scene-frame">
-            <img id="sceneImage" src="assets/images/hotel-lobby.jpg" alt="Scène du jeu" />
-            <div id="dangerBadge" class="danger-badge">Zone instable</div>
-          </div>
-
-          <div class="narration-box">
-            <p id="sceneText">
-              Vous ouvrez les yeux dans la réception d’un hôtel silencieux.
-              La poussière flotte comme une cendre sacrée.
-              Quelque chose ici a survécu. Quelque chose vous attend.
-            </p>
-          </div>
-        </div>
-
-        <aside class="sidebar">
-          <div class="panel">
-            <h3>Objet rencontré</h3>
-            <div class="item-card">
-              <img id="itemImage" src="assets/images/item-shadow.png" alt="Objet trouvé" />
-              <div>
-                <h4 id="itemName">Aucun objet</h4>
-                <p id="itemDescription">
-                  Explorez une pièce pour découvrir ce qui s’y cache.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel">
-            <h3>Objets dans la pièce</h3>
-            <div id="roomItemArea" class="room-item-area">Aucun objet trouvé. Montez un étage pour découvrir.</div>
-          </div>
-
-          <div class="panel">
-            <h3>Options</h3>
-            <div class="actions-grid">
-              <button id="useBtn" class="btn btn-secondary" disabled>Utiliser</button>
-              <button id="discardBtn" class="btn btn-secondary" disabled>Jeter</button>
-              <button id="inventoryBtn" class="btn btn-secondary" disabled>Ajouter à l'inventaire</button>
-              <button id="openInventoryBtn" class="btn btn-secondary">Voir l'inventaire</button>
-              <button id="nextFloorBtn" class="btn btn-primary">Monter</button>
-              <button id="restartBtn" class="btn btn-danger hidden">Recommencer</button>
-            </div>
-          </div>
-
-          <div class="panel">
-            <h3>Journal de survie</h3>
-            <div id="logList" class="log-list"></div>
-          </div>
-        </aside>
-      </section>
-    </section>
-  </main>
-
-  <!-- AUDIO -->
-  <audio id="bgAmbience" loop>
-    <source src="assets/sounds/ambience.mp3" type="audio/mpeg" />
-  </audio>
-
-  <audio id="sfxClick">
-    <source src="assets/sounds/click.mp3" type="audio/mpeg" />
-  </audio>
-
-  <audio id="sfxContamination">
-    <source src="assets/sounds/contamination.mp3" type="audio/mpeg" />
-  </audio>
-
-  <audio id="sfxHeal">
-    <source src="assets/sounds/heal.mp3" type="audio/mpeg" />
-  </audio>
-
-  <audio id="sfxExplosion">
-    <source src="assets/sounds/explosion.mp3" type="audio/mpeg" />
-  </audio>
-
-  <audio id="sfxGameOver">
-    <source src="assets/sounds/game-over.mp3" type="audio/mpeg" />
-  </audio>
-
-  <div id="inventoryPanel" class="inventory-panel hidden">
-    <div class="inventory-content">
-      <div class="inventory-header">
-        <h3>Inventaire</h3>
-        <button id="closeInventoryBtn" class="btn btn-ghost">Fermer</button>
-      </div>
-      <div id="inventoryList" class="inventory-list">Aucun objet dans l'inventaire.</div>
+<!-- ═══════════════════════ HOME SCREEN ═══════════════════════ -->
+<div class="screen active" id="screen-home">
+  <div id="home-bg">
+    <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
+      <div class="arch-line" style="width:1px;height:100%;left:52%;top:0"></div>
+      <div class="arch-line" style="height:1px;width:100%;top:40%;animation-delay:2.5s"></div>
+      <div class="arch-line" style="height:1px;width:62%;top:72%;animation-delay:5s"></div>
     </div>
   </div>
 
-  <script type="module" src="js/main.js"></script>
+  <div id="home-layout">
+
+    <!-- LEFT — hero cinématique -->
+    <div id="home-hero">
+      <div class="hero-deco-line"></div>
+      <div class="hero-bg-number">9</div>
+      <div class="hero-rad-ring"></div>
+
+      <div class="hero-tag">HORIZON HOTEL &nbsp;·&nbsp; 2027</div>
+
+      <h1 class="hero-title">
+        NOTHING
+        <span class="hero-title-outline">IS SAFE</span>
+      </h1>
+
+      <p class="hero-tagline">
+        Une catastrophe nucléaire. Un hôtel abandonné.<br>
+        Neuf étages. Une seule vérité à découvrir.
+      </p>
+
+      <div class="hero-stamp">
+        <span class="hero-stamp-dot"></span>
+        INCIDENT CLASSIFIÉ&nbsp;&nbsp;·&nbsp;&nbsp;NIVEAU 5&nbsp;&nbsp;·&nbsp;&nbsp;14.03.2027
+      </div>
+    </div>
+
+    <!-- RIGHT — actions -->
+    <div id="home-panel">
+
+      <!-- Nom -->
+      <div class="name-block">
+        <div class="panel-label">Identification</div>
+        <div class="name-field">
+          <span class="name-prefix">▶</span>
+          <input type="text" id="player-name" placeholder="Votre nom, survivante…"
+                 maxlength="20" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+
+      <!-- Narration -->
+      <div class="story-block">
+        <div class="panel-label">Situation</div>
+        <p class="story-text">
+          Vous vous réveillez dans la réception d'un hôtel abandonné.
+          L'air sent le métal et la cendre. Votre Geiger cliquette dans votre poche.
+          Ici, rien n'est sûr — pas même ce qui devrait vous aider.
+        </p>
+      </div>
+
+      <!-- Boutons -->
+      <div class="btns-block">
+        <button class="btn-primary" data-label="ENTRÉE"
+                onclick="App.startGame()">ENTRER DANS L'HÔTEL</button>
+        <div class="btns-row">
+          <button class="btn-secondary" onclick="App.showScreen('rules')">
+            <span class="btn-secondary-icon">📖</span> Règles du jeu
+          </button>
+          <button class="btn-secondary" onclick="App.showScreen('scores')">
+            <span class="btn-secondary-icon">🏆</span> Classement
+          </button>
+          <button class="btn-secondary" onclick="App.showScreen('settings')">
+            <span class="btn-secondary-icon">⚙</span> Options
+          </button>
+        </div>
+      </div>
+
+      <!-- Meilleurs scores -->
+      <div class="scores-block">
+        <div class="panel-label">Meilleurs survivants</div>
+        <div id="home-scores-list">
+          <div class="no-scores">Aucun survivant enregistré.</div>
+        </div>
+      </div>
+
+    </div><!-- /home-panel -->
+  </div><!-- /home-layout -->
+
+  <div id="home-footer">
+    <span>↑↓←→ DÉPLACER &nbsp;·&nbsp; ENTRÉE INTERAGIR &nbsp;·&nbsp; E EXAMINER &nbsp;·&nbsp; ESC PAUSE</span>
+    <span>NOTHING IS SAFE &nbsp;·&nbsp; Dangerous Jam JS 2026</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════ RÈGLES DU JEU ═══════════════════════ -->
+<div class="screen" id="screen-rules">
+  <div class="rules-panel">
+    <div class="rules-head">
+      <div class="rules-head-left">
+        <div class="rules-eyebrow">Notice de survie</div>
+        <div class="rules-title">RÈGLES DU JEU</div>
+      </div>
+      <button class="rules-close" onclick="App.showScreen('home')">✕ FERMER</button>
+    </div>
+
+    <div class="rules-body">
+
+      <!-- HISTOIRE -->
+      <div class="rules-section">
+        <div class="rules-section-title"><span class="icon">☢</span>Contexte</div>
+        <p class="rules-text">
+          Nous sommes le <strong>14 mars 2027</strong>. Un incident nucléaire a condamné
+          l'<em>Hôtel Horizon</em>. Vous vous réveillez au rez-de-chaussée sans mémoire de
+          comment vous y êtes arrivée. L'air est vicié. Votre compteur Geiger s'affole.
+          Quelque part dans cet hôtel de <strong>9 étages</strong> se cache la vérité sur
+          le programme secret <em>SIGMA</em>.
+        </p>
+      </div>
+
+      <!-- OBJECTIF -->
+      <div class="rules-section">
+        <div class="rules-section-title"><span class="icon">🎯</span>Objectif</div>
+        <p class="rules-text">
+          Explorez les <strong>9 étages</strong> de l'hôtel, montez par les ascenseurs,
+          et tentez de <em>trouver les Dossiers SIGMA</em> avant que la radiation ne vous
+          tue. Chaque étage est plus irradié que le précédent. Le temps presse.
+        </p>
+      </div>
+
+      <!-- MÉCANIQUES -->
+      <div class="rules-section">
+        <div class="rules-section-title"><span class="icon">⚙</span>Mécaniques de jeu</div>
+        <div class="rules-grid">
+          <div class="rules-card">
+            <div class="rules-card-title">❤ Vie (HP)</div>
+            <div class="rules-card-body">
+              Commence à <strong>100</strong>. Diminue avec les blessures et
+              les événements. Se restaure avec les kits médicaux et la nourriture.
+              Si HP = 0 → mort.
+            </div>
+          </div>
+          <div class="rules-card">
+            <div class="rules-card-title">☢ Radiation</div>
+            <div class="rules-card-body">
+              Augmente en permanence. Monte plus vite dans les zones contaminées.
+              À <strong>75%+</strong> : dégâts directs sur HP. À 100% → mort.
+              Réduire avec iode / injecteurs.
+            </div>
+          </div>
+          <div class="rules-card">
+            <div class="rules-card-title">🛗 Ascenseur</div>
+            <div class="rules-card-body">
+              Chaque étage est verrouillé par un <strong>code à 4 chiffres</strong>.
+              Trouvez le document dans le couloir pour obtenir le code.
+              Monter irradie.
+            </div>
+          </div>
+          <div class="rules-card">
+            <div class="rules-card-title">🔐 Portes</div>
+            <div class="rules-card-body">
+              Certaines salles nécessitent un <strong>badge biométrique</strong>.
+              Trouvez le bon badge dans l'hôtel pour accéder aux zones
+              restreintes (Maintenance, Labo).
+            </div>
+          </div>
+          <div class="rules-card">
+            <div class="rules-card-title">🎒 Inventaire</div>
+            <div class="rules-card-body">
+              <strong>20 emplacements</strong>. Ramassez les objets en approchant
+              et en appuyant sur ENTRÉE. Utilisez-les depuis le panneau de droite.
+              Portez les équipements pour activer les boucliers.
+            </div>
+          </div>
+          <div class="rules-card">
+            <div class="rules-card-title">⚡ Événements</div>
+            <div class="rules-card-body">
+              Des événements aléatoires surviennent au fil du temps :
+              fuites de vapeur, surtensions, silhouettes mystérieuses…
+              Certains font du mal, d'autres peuvent aider.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONDITIONS DE FIN -->
+      <div class="rules-section">
+        <div class="rules-section-title"><span class="icon">🏁</span>Conditions de fin de partie</div>
+        <div class="rules-endcond">
+          <div class="end-row win">
+            <div class="end-icon">✦</div>
+            <div class="end-content">
+              <div class="end-title">VICTOIRE</div>
+              <div class="end-desc">
+                Atteignez le <strong>9ème étage</strong> en possession des
+                <strong>Dossiers SIGMA</strong>. Vous avez découvert la vérité.
+                Un bonus de +3000 points est accordé. Plus votre HP est élevé
+                et votre radiation basse, meilleur sera votre score final.
+              </div>
+            </div>
+          </div>
+          <div class="end-row lose">
+            <div class="end-icon">☠</div>
+            <div class="end-content">
+              <div class="end-title">MORT — BLESSURES</div>
+              <div class="end-desc">
+                Vos <strong>points de vie atteignent 0</strong>. Blessures,
+                événements ou radiation massive peuvent en être la cause.
+                Utilisez les kits médicaux et protégez-vous.
+              </div>
+            </div>
+          </div>
+          <div class="end-row lose">
+            <div class="end-icon">☢</div>
+            <div class="end-content">
+              <div class="end-title">MORT — EFFONDREMENT RADIATIF</div>
+              <div class="end-desc">
+                Votre <strong>niveau de radiation atteint 100%</strong>.
+                La dégradation cellulaire est totale. Portez la combinaison hazmat,
+                utilisez les comprimés d'iode et les injecteurs anti-rad.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCORE -->
+      <div class="rules-section">
+        <div class="rules-section-title"><span class="icon">🏆</span>Système de score</div>
+        <p class="rules-text" style="margin-bottom:10px">
+          Votre score est calculé en continu et finalisé à la mort ou à la victoire.
+        </p>
+        <table class="rules-scores-tbl">
+          <thead><tr><th>Rang</th><th>Condition</th><th>Points</th></tr></thead>
+          <tbody>
+            <tr><td>S</td><td>Victoire avec score ≥ 6000</td><td style="color:var(--bile-bright)">Légende</td></tr>
+            <tr><td>A</td><td>Victoire avec score ≥ 4000</td><td style="color:var(--bile)">Expert</td></tr>
+            <tr><td>B</td><td>Victoire ≥ 2200 ou défaite ≥ 1800</td><td style="color:var(--fog)">Survivant</td></tr>
+            <tr><td>C</td><td>Défaite avec score ≥ 700</td><td style="color:var(--ash-light)">Téméraire</td></tr>
+            <tr><td>D</td><td>Élimination rapide</td><td style="color:var(--blood)">Oublié</td></tr>
+          </tbody>
+        </table>
+        <p class="rules-text" style="margin-top:10px;font-size:.75rem;opacity:.6">
+          Bonus : +80 pts/porte biométrique · +étage×80 pts/montée · HP×3 et Rad×−4 en fin.
+          Pénalité radiation déduite du score final.
+        </p>
+      </div>
+
+      <!-- CONTRÔLES -->
+      <div class="rules-section">
+        <div class="rules-section-title"><span class="icon">🎮</span>Contrôles</div>
+        <div class="rules-keys">
+          <div class="key">↑ ↓ ← →</div><div class="key-desc">Déplacer la survivante</div>
+          <div class="key">ENTRÉE</div><div class="key-desc">Interagir — ouvrir porte, ramasser objet, activer ascenseur</div>
+          <div class="key">E</div><div class="key-desc">Examiner la zone actuelle (infos + radiation légère)</div>
+          <div class="key">ESC</div><div class="key-desc">Menu pause (options, classement, quitter)</div>
+          <div class="key">Clic</div><div class="key-desc">Sélectionner un objet dans l'inventaire</div>
+        </div>
+      </div>
+
+    </div><!-- /rules-body -->
+  </div>
+</div>
+
+<!-- ═══════════════════════ SETTINGS SCREEN ═══════════════════════ -->
+<div class="screen" id="screen-settings">
+  <div class="settings-panel">
+    <div class="settings-head">
+      <div class="settings-head-title">PARAMÈTRES</div>
+      <button class="settings-head-close" onclick="Settings.closeFromContext()">✕ FERMER</button>
+    </div>
+    <div class="settings-body">
+      <div class="settings-group-title">Joueur</div>
+      <div class="setting-item">
+        <div><div class="setting-label">Nom du personnage</div></div>
+        <div class="set-name-wrap">
+          <input type="text" id="settings-name" placeholder="Survivante" maxlength="20" spellcheck="false">
+          <button class="set-save-btn" onclick="Settings.saveName()">OK</button>
+        </div>
+      </div>
+
+      <div class="settings-group-title">Audio</div>
+      <div class="setting-item">
+        <div><div class="setting-label">Sons activés</div><div class="setting-hint">Effets audio et Geiger</div></div>
+        <div class="tog on" id="tog-sound" onclick="Settings.toggle('sound',this)"></div>
+      </div>
+      <div class="setting-item">
+        <div><div class="setting-label">Volume Geiger</div><div class="setting-hint">Intensité du compteur</div></div>
+        <input type="range" class="set-slider" id="slider-geiger" min="0" max="1" step=".05" value=".6" oninput="Settings.setGeigerVol(this.value)">
+      </div>
+      <div class="setting-item">
+        <div><div class="setting-label">Volume ambiance</div><div class="setting-hint">Drones et effets atmosphériques</div></div>
+        <input type="range" class="set-slider" id="slider-ambient-vol" min="0" max="1" step=".05" value=".3">
+      </div>
+
+      <div class="settings-group-title">Visuel</div>
+      <div class="setting-item">
+        <div><div class="setting-label">Grain filmique</div><div class="setting-hint">Texture de bruit à l'écran</div></div>
+        <div class="tog on" id="tog-grain" onclick="Settings.toggle('grain',this)"></div>
+      </div>
+      <div class="setting-item">
+        <div><div class="setting-label">Vignette radiation</div><div class="setting-hint">Bords rouges selon contamination</div></div>
+        <div class="tog on" id="tog-vignette" onclick="Settings.toggle('vignette',this)"></div>
+      </div>
+      <div class="setting-item">
+        <div><div class="setting-label">Tremblement d'écran</div><div class="setting-hint">Vibration lors de la montée</div></div>
+        <div class="tog on" id="tog-shake" onclick="Settings.toggle('shake',this)"></div>
+      </div>
+
+      <div class="settings-group-title">Difficulté</div>
+      <div class="setting-item">
+        <div><div class="setting-label">Radiation ambiante</div><div class="setting-hint">0 = Faible &nbsp;·&nbsp; 3 = Létal</div></div>
+        <input type="range" class="set-slider" id="slider-rad" min="0" max="3" step="1" value="1">
+      </div>
+      <div class="setting-item">
+        <div><div class="setting-label">Fréquence événements</div><div class="setting-hint">0 = Rare &nbsp;·&nbsp; 3 = Constant</div></div>
+        <input type="range" class="set-slider" id="slider-events" min="0" max="3" step="1" value="1">
+      </div>
+
+      <div class="settings-group-title">Données</div>
+      <div class="setting-item">
+        <div><div class="setting-label">Effacer les scores</div><div class="setting-hint">Supprime tout l'historique local</div></div>
+        <button class="set-btn ghost" onclick="Settings.clearScores()">Effacer</button>
+      </div>
+    </div>
+    <div class="settings-foot">
+      <button class="set-btn ghost" onclick="Settings.closeFromContext()">Annuler</button>
+      <button class="set-btn primary" onclick="Settings.save()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SCORES SCREEN ═══════════════════════ -->
+<div class="screen" id="screen-scores">
+  <div class="scores-panel">
+    <div class="scores-head">
+      <div class="scores-head-title">CLASSEMENT</div>
+      <button class="settings-head-close" onclick="App.showScreen('home')">✕ FERMER</button>
+    </div>
+    <div class="scores-body">
+      <table class="scores-tbl">
+        <thead><tr><th>#</th><th>Nom</th><th>Score</th><th>Étage</th><th>Résultat</th><th>Date</th></tr></thead>
+        <tbody id="scores-tbody"></tbody>
+      </table>
+      <div class="scores-empty" id="scores-empty" style="display:none">
+        Aucun survivant enregistré.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ GAME OVER SCREEN ═══════════════════════ -->
+<div class="screen" id="screen-gameover">
+  <div class="go-tag" id="go-tag">Fin de partie</div>
+  <h2 class="go-title dead" id="go-title">SILENCE</h2>
+  <p class="go-story" id="go-story"></p>
+  <div class="go-scorecard">
+    <div class="go-score-label">Score final</div>
+    <div class="go-score-big dead" id="go-score-big">0</div>
+    <div class="go-breakdown" id="go-breakdown"></div>
+    <div id="go-rank"></div>
+  </div>
+  <div class="go-btns">
+    <button class="go-btn main" onclick="Game.restart()">▶ Rejouer</button>
+    <button class="go-btn ghost" onclick="App.showScreen('home')">🏠 Accueil</button>
+    <button class="go-btn ghost" onclick="App.showScreen('scores')">🏆 Scores</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════ GAME SCREEN ═══════════════════════ -->
+<div class="screen" id="screen-game">
+  <!-- HUD -->
+  <div id="hud">
+    <span class="hud-brand">HORIZON</span>
+    <div class="hud-sep"></div>
+    <div class="geiger-dot" id="geiger-dot"></div>
+    <div class="hud-sep"></div>
+    <div class="hud-bar-wrap">
+      <span class="hud-bar-lbl">HP</span>
+      <div class="hud-bar-outer"><div class="hud-bar-inner bar-hp" id="bar-hp" style="width:100%"></div></div>
+      <span class="hud-bar-val" id="val-hp">100</span>
+    </div>
+    <div class="hud-bar-wrap">
+      <span class="hud-bar-lbl">RAD</span>
+      <div class="hud-bar-outer"><div class="hud-bar-inner bar-rad" id="bar-rad" style="width:0%"></div></div>
+      <span class="hud-bar-val" id="val-rad">0%</span>
+    </div>
+    <div class="hud-shield">🛡 <span id="val-shield">0</span>%</div>
+    <div class="hud-rad-warn" id="rad-warn">⚠ IRRADIATION CRITIQUE</div>
+    <div class="hud-right">
+      <span class="hud-player-name" id="hud-name">Survivante</span>
+      <div class="hud-score-wrap">
+        <span class="hud-score-lbl">Score</span>
+        <span class="hud-score-val" id="hud-score-val">0</span>
+      </div>
+      <span class="hud-floor">ÉT. <span id="hud-floor">1</span>/9</span>
+      <div class="hud-btn-sep"></div>
+      <button class="hud-btn" onclick="Game.openPause()" title="Menu pause (ESC)">
+        <span class="hud-btn-icon">⏸</span> Menu
+      </button>
+    </div>
+  </div>
+
+  <!-- Layout -->
+  <div id="game-layout">
+
+    <!-- LEFT PANEL -->
+    <div id="panel-left">
+      <div class="panel-section">
+        <div class="panel-label">Carte</div>
+        <canvas id="mini-map" width="178" height="146"></canvas>
+      </div>
+      <div class="panel-section">
+        <div class="panel-label">Situation</div>
+        <div class="stat-line"><span class="lbl">Zone</span><span class="val accent" id="st-zone">—</span></div>
+        <div class="stat-line"><span class="lbl">Étage</span><span class="val" id="st-floor">1/9</span></div>
+        <div class="stat-line"><span class="lbl">Rad totale</span><span class="val" id="st-rad">0 mSv</span></div>
+        <div class="stat-line"><span class="lbl">Objets</span><span class="val" id="st-items">0</span></div>
+        <div class="stat-line"><span class="lbl">Ascenseur</span><span class="val bad" id="st-elev">✗ Inconnu</span></div>
+        <div class="stat-line"><span class="lbl">Maintenance</span><span class="val bad" id="st-maint">✗ Sans badge</span></div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-label">Documents</div>
+      </div>
+      <div id="docs-panel"><div class="no-docs">Aucun document.</div></div>
+    </div>
+
+    <!-- CENTER CANVAS -->
+    <div id="panel-center">
+      <canvas id="game-canvas"></canvas>
+      <div id="vignette"></div>
+      <div id="interact-hint"></div>
+      <div id="notif"></div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div id="panel-right">
+      <div class="panel-section inv-header">
+        <span class="panel-label" style="margin:0">Inventaire</span>
+        <span class="inv-count-wrap"><span id="inv-count">0</span>/20</span>
+      </div>
+      <div id="inventory-grid"></div>
+      <div id="item-detail">
+        <div id="item-det-name" style="color:var(--ash-light);font-size:.68rem;font-style:italic;opacity:.4">Sélectionnez un objet</div>
+        <div id="item-det-desc"></div>
+        <div id="item-det-flavor"></div>
+        <div class="item-actions" id="item-actions" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- LOG -->
+    <div id="panel-log">
+      <div class="log-head">Journal</div>
+      <div id="log-body"></div>
+    </div>
+
+  </div><!-- /game-layout -->
+</div><!-- /screen-game -->
+
+<!-- ═══════════════════════ MODALS ═══════════════════════ -->
+<!-- Document -->
+<div class="modal-bg" id="modal-doc">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-icon" id="doc-icon">📄</span>
+      <div><div class="modal-title" id="doc-title">Document</div>
+           <div class="modal-sub" id="doc-sub"></div></div>
+    </div>
+    <div class="modal-body">
+      <div class="doc-paper" id="doc-body"></div>
+      <div class="modal-btns">
+        <button class="m-btn ok" id="doc-keep" onclick="Game.docKeep()">📥 Conserver</button>
+        <button class="m-btn cancel" id="doc-drop" onclick="Game.docDrop()">🗑 Jeter</button>
+        <button class="m-btn cancel" id="doc-close" style="display:none" onclick="Game.docClose()">✕ Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lock / Biométrique -->
+<div class="modal-bg" id="modal-lock">
+  <div class="modal-box">
+    <div class="modal-body">
+      <div class="lock-title" id="lock-title">🔐 Accès sécurisé</div>
+      <div class="lock-sub" id="lock-sub">Autorisation requise.</div>
+      <div id="lock-bio" style="display:none">
+        <div style="font-size:.65rem;color:var(--ash-light);margin-bottom:8px;letter-spacing:.1em">SÉLECTIONNEZ UNE CARTE :</div>
+        <div class="lock-cards" id="lock-cards"></div>
+      </div>
+      <div id="lock-code" style="display:none">
+        <div class="code-display"><div class="code-digits" id="code-digits">_ _ _ _</div><div class="code-hint">CODE 4 CHIFFRES</div></div>
+        <div class="numpad" id="numpad"></div>
+      </div>
+      <div class="lock-err" id="lock-err">✗ Accès refusé</div>
+      <div class="modal-btns">
+        <button class="m-btn ok" onclick="Game.lockOk()">✓ Confirmer</button>
+        <button class="m-btn cancel" onclick="Game.lockCancel()">✗ Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pause overlay -->
+<div id="pause-overlay">
+  <div class="pause-box">
+    <div class="pause-head">
+      <div class="pause-title">PAUSE</div>
+      <div class="pause-subtitle" id="pause-player-label">En cours</div>
+    </div>
+    <div class="pause-stats">
+      <div class="pause-stat"><div class="pause-stat-val" id="pause-hp">100</div><div class="pause-stat-lbl">HP</div></div>
+      <div class="pause-stat"><div class="pause-stat-val" id="pause-rad">0%</div><div class="pause-stat-lbl">Radiation</div></div>
+      <div class="pause-stat"><div class="pause-stat-val" id="pause-score">0</div><div class="pause-stat-lbl">Score</div></div>
+    </div>
+    <div class="pause-menu">
+      <button class="pause-btn" onclick="Game.closePause()">
+        <span class="pause-btn-icon">▶</span>Reprendre<span class="pause-btn-arrow">›</span>
+      </button>
+      <button class="pause-btn" onclick="Game.closePause();App.showScreen('settings')">
+        <span class="pause-btn-icon">⚙</span>Paramètres<span class="pause-btn-arrow">›</span>
+      </button>
+      <button class="pause-btn" onclick="Game.closePause();App.showScreen('scores')">
+        <span class="pause-btn-icon">🏆</span>Classement<span class="pause-btn-arrow">›</span>
+      </button>
+      <button class="pause-btn danger" onclick="Game.closePause();Game.goHome()">
+        <span class="pause-btn-icon">🚪</span>Quitter la partie<span class="pause-btn-arrow">›</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
+<script src="audio.js"></script>
+<script src="gameState.js"></script>
+<script src="items.js"></script>
+<script src="events.js"></script>
+<script src="main.js"></script>
+
 </body>
 </html>
