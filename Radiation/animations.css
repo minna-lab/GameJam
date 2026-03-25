@@ -1,0 +1,24 @@
+/* ☢ HORIZON — animations.css */
+
+@keyframes fadeslide { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadein    { from{opacity:0} to{opacity:1} }
+@keyframes grain-shift {
+  0%{background-position:0 0}25%{background-position:-30px 15px}
+  50%{background-position:20px -10px}75%{background-position:-10px 25px}
+}
+@keyframes pulse-dot    { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.55)} }
+@keyframes warn-blink   { 0%,100%{opacity:1} 50%{opacity:.08} }
+@keyframes bar-crit     { from{opacity:1} to{opacity:.3} }
+@keyframes log-in       { from{opacity:0;transform:translateX(-5px)} to{opacity:1;transform:none} }
+@keyframes score-pop    { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-40px)} }
+@keyframes code-pulse   { 0%,100%{text-shadow:0 0 10px rgba(196,80,26,.3)} 50%{text-shadow:0 0 22px rgba(196,80,26,.7)} }
+@keyframes line-drift   { 0%,100%{opacity:.04} 50%{opacity:.09} }
+@keyframes shake        { 0%,100%{transform:none} 15%{transform:translate(-3px,-1px) rotate(-.4deg)} 30%{transform:translate(3px,1px) rotate(.4deg)} 45%{transform:translate(-2px,0)} 60%{transform:translate(2px,-1px)} 75%{transform:translate(-1px,2px)} 90%{transform:translate(1px,0)} }
+@keyframes geiger-pulse { 0%,100%{opacity:1;box-shadow:0 0 6px var(--bile-bright)} 50%{opacity:.1;box-shadow:none} }
+
+/* Home screen specific */
+@keyframes hero-number { 0%,100%{opacity:.015} 50%{opacity:.025} }
+@keyframes home-scan   { 0%{background-position:0 0} 100%{background-position:0 100%} }
+@keyframes home-flicker{ 0%,98%,100%{opacity:1} 99%{opacity:.6} }
+@keyframes rad-ring    { 0%{transform:scale(1);opacity:.4} 100%{transform:scale(2.2);opacity:0} }
+@keyframes rules-in    { from{opacity:0;transform:scale(.96) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
