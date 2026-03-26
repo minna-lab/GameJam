@@ -1,5 +1,3 @@
-// ☢ HORIZON — audio.js
-// Moteur audio Web Audio API — sons procéduraux distincts
 
 const Audio = (() => {
   let ctx = null;
