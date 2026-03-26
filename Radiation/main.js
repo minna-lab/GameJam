@@ -412,7 +412,7 @@ const Game = (() => {
   }
 
   function _doVictory(){S.dead=true;Audio.play('victory');setTimeout(()=>_endScreen('victory'),800);}
-  function _die(reason){S.dead=true;Audio.play('gameover');Audio.stopGeiger();setTimeout(()=>_endScreen(reason),800);}
+  function _die(reason){S.dead=true;Audio.play('gameover');Audio.stopGeiger();if(typeof GameMusic!=='undefined')GameMusic.stop();setTimeout(()=>_endScreen(reason),800);}
 
   function _endScreen(type){
     const victory=type==='victory';
@@ -636,6 +636,7 @@ const Game = (() => {
     const hv=document.getElementById('val-hp');if(hv)hv.textContent=h;
     const rb=document.getElementById('bar-rad');if(rb){rb.style.width=r+'%';rb.className='hud-bar-inner bar-rad'+(r>70?' c':r>40?' w':'');}
     const rv=document.getElementById('val-rad');if(rv)rv.textContent=r+'%';
+    if(typeof GameMusic!=='undefined'&&GameMusic.isPlaying())GameMusic.setRadiation(r);
     const sv=document.getElementById('val-shield');if(sv)sv.textContent=S.shield;
     const rw=document.getElementById('rad-warn');if(rw)rw.style.display=r>75?'block':'none';
   }
@@ -740,7 +741,7 @@ const Game = (() => {
   function goHome(){
     const po=document.getElementById('pause-overlay');if(po)po.classList.remove('open');
     if(S.af)cancelAnimationFrame(S.af);
-    Audio.stopGeiger();Score.reset();App.showScreen('home');
+    Audio.stopGeiger();Score.reset();if(typeof GameMusic!=='undefined')GameMusic.stop();App.showScreen('home');
   }
   function confirmHome(){openPause();}
 
@@ -814,6 +815,7 @@ const App = (() => {
     try{const r=localStorage.getItem('horizon_settings_v1');const s=r?JSON.parse(r):{};s.playerName=name;localStorage.setItem('horizon_settings_v1',JSON.stringify(s));}catch(e){}
     Audio.init();Audio.resume();
     showScreen('game');Game.start(name);
+    if(typeof GameMusic!=='undefined')GameMusic.start();
   }
 
   function getCurrent(){return _currentScreen;}
@@ -840,4 +842,103 @@ window.addEventListener('DOMContentLoaded',()=>{
     ni.addEventListener('keydown',e=>{if(e.key==='Enter')App.startGame();});
     const sn=Settings.getPlayerName();if(sn&&sn!=='Survivante')ni.value=sn;
   }
+});
+// ════════════════════════════════════════
+
+// ════════════════════════════════════════
+// ANIMATIONS PAGE D'ACCUEIL
+// ════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+
+  // 1. Symboles ☢ flottants
+  const symContainer = document.getElementById('home-rad-symbols');
+  if (symContainer) {
+    const SYMS   = ['☢','☣','⚠'];
+    const COLORS = ['rgba(196,80,26,','rgba(57,255,20,','rgba(180,160,80,'];
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('div');
+      el.className = 'rad-sym';
+      el.textContent = SYMS[i % 3];
+      el.style.cssText = `
+        --sz:${1+Math.random()*3}rem;
+        --col:${COLORS[i%3]+( .05+Math.random()*.12)+')'};
+        --dur:${8+Math.random()*16}s;
+        --del:${Math.random()*-15}s;
+        left:${Math.random()*100}%;
+        top:${20+Math.random()*75}%;
+      `;
+      symContainer.appendChild(el);
+    }
+  }
+
+  // 2. Lignes de glitch aléatoires
+  const glitchContainer = document.getElementById('home-glitch-lines');
+  if (glitchContainer) {
+    function spawnGlitch() {
+      if (Math.random() > 0.35) { setTimeout(spawnGlitch, 300+Math.random()*2500); return; }
+      for (let i = 0; i < 1+Math.floor(Math.random()*3); i++) {
+        const w = 20+Math.random()*80;
+        const el = document.createElement('div');
+        el.style.cssText = `position:absolute;pointer-events:none;
+          top:${10+Math.random()*85}%;left:${Math.random()*(100-w)}%;
+          width:${w}%;height:${1+Math.random()*3}px;
+          background:${Math.random()<.5?'rgba(196,80,26,':'rgba(57,255,20,'}${.2+Math.random()*.5});`;
+        glitchContainer.appendChild(el);
+        setTimeout(() => el.remove(), 40+Math.random()*120);
+      }
+      setTimeout(spawnGlitch, 300+Math.random()*2500);
+    }
+    spawnGlitch();
+  }
+
+  // 3. Compteurs animés (rad, survivants, jours)
+  [
+    { id:'hls-rad',  target:4847, delay:800,  fluctuate:true },
+    { id:'hls-surv', target:0,    delay:600,  fluctuate:false },
+    { id:'hls-days', target:362,  delay:1000, fluctuate:false },
+  ].forEach(({ id, target, delay, fluctuate }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const unit = el.querySelector('.hls-unit')?.outerHTML || '';
+    setTimeout(() => {
+      let t0 = null;
+      requestAnimationFrame(function step(ts) {
+        if (!t0) t0 = ts;
+        const p = Math.min((ts-t0)/2200, 1);
+        el.innerHTML = Math.floor(target * (1-Math.pow(1-p,3))).toLocaleString('fr-FR') + unit;
+        if (p < 1) requestAnimationFrame(step);
+        else if (fluctuate)
+          setInterval(() => {
+            el.innerHTML = (target+Math.floor((Math.random()-.5)*50)).toLocaleString('fr-FR')+unit;
+          }, 400+Math.random()*600);
+      });
+    }, delay);
+  });
+
+  // 4. Glitch de couleur sur le titre
+  const title = document.getElementById('hero-title-glitch');
+  if (title) {
+    const overlay = Object.assign(document.createElement('div'), {
+      className:'hero-title-glitch-overlay', textContent:'RADIATION'
+    });
+    overlay.setAttribute('aria-hidden','true');
+    title.appendChild(overlay);
+    setInterval(() => {
+      if (Math.random() < .15) {
+        title.style.color = Math.random() < .5 ? '#c4501a' : '#39ff14';
+        setTimeout(() => title.style.color = '', 50+Math.random()*80);
+      }
+    }, 1800);
+  }
+
+  // 5. Variation des anneaux
+  document.querySelectorAll('.home-ring').forEach(r => {
+    r.style.animationDuration = (2.8+Math.random()*1.5)+'s';
+  });
+
+  // 6. Stopper la musique d'accueil quand le jeu démarre
+  document.addEventListener('click', e => {
+    if (e.target.closest('.btn-primary') && typeof HomeMusic !== 'undefined')
+      HomeMusic.stopForGame();
+  });
 });

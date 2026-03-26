@@ -16,10 +16,37 @@
 <!-- ═══════════════════════ HOME SCREEN ═══════════════════════ -->
 <div class="screen active" id="screen-home">
   <div id="home-bg">
+    <!-- Symboles radiation flottants (generés en JS) -->
+    <div id="home-rad-symbols"></div>
+    <!-- Anneaux de radiation -->
+    <div id="home-rings-center">
+      <div class="home-ring"></div>
+      <div class="home-ring"></div>
+      <div class="home-ring"></div>
+      <div class="home-ring"></div>
+    </div>
+    <!-- Arch lines -->
     <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
       <div class="arch-line" style="width:1px;height:100%;left:52%;top:0"></div>
       <div class="arch-line" style="height:1px;width:100%;top:40%;animation-delay:2.5s"></div>
       <div class="arch-line" style="height:1px;width:62%;top:72%;animation-delay:5s"></div>
+    </div>
+    <!-- Glitch scanlines -->
+    <div id="home-glitch-lines"></div>
+  </div>
+  <!-- MARQUEUR_FIN_BG
+
+  <!-- Music toggle -->
+  <button id="home-music-btn" onclick="HomeMusic.toggle()" title="Musique d'accueil">
+    <span id="home-music-icon">♪</span>
+    <span id="home-music-label">MUSIQUE</span>
+  </button>
+
+  <!-- Alert ticker at top -->
+  <div id="home-alert-ticker">
+    <span class="ticker-label">⚠ ALERTE</span>
+    <div class="ticker-track">
+      <span class="ticker-content">ZONE CONTAMINÉE — ÉVACUATION NIVEAU 5 — PROGRAMME SIGMA CLASSIFIÉ — ACCÈS INTERDIT — NE PAS ENTRER — RADIATION CRITIQUE — 14.03.2027 — TOUTES LES FRÉQUENCES BROUILLÉES — INCIDENT CONFIRMÉ — NIVEAUX DE CÉSIUM HORS LIMITES — ZONE CONTAMINÉE — ÉVACUATION NIVEAU 5 — PROGRAMME SIGMA CLASSIFIÉ — ACCÈS INTERDIT — NE PAS ENTRER — RADIATION CRITIQUE</span>
     </div>
   </div>
 
@@ -33,7 +60,7 @@
 
       <div class="hero-tag"> Nothing is safe&nbsp;·&nbsp; 2027</div>
 
-      <h1 class="hero-title">
+      <h1 class="hero-title" id="hero-title-glitch" data-text="RADIATION">
         RADIATION 
         <span class="hero-title-outline">TOWER</span>
       </h1>
@@ -46,6 +73,24 @@
       <div class="hero-stamp">
         <span class="hero-stamp-dot"></span>
         INCIDENT CLASSIFIÉ&nbsp;&nbsp;·&nbsp;&nbsp;NIVEAU 5&nbsp;&nbsp;·&nbsp;&nbsp;14.03.2027
+      </div>
+
+      <!-- Animated stat counters -->
+      <div class="hero-live-stats">
+        <div class="hls-item">
+          <div class="hls-val" id="hls-rad">0<span class="hls-unit">mSv</span></div>
+          <div class="hls-lbl">RADIATION</div>
+        </div>
+        <div class="hls-sep"></div>
+        <div class="hls-item">
+          <div class="hls-val" id="hls-surv">0<span class="hls-unit"></span></div>
+          <div class="hls-lbl">SURVIVANTS</div>
+        </div>
+        <div class="hls-sep"></div>
+        <div class="hls-item">
+          <div class="hls-val" id="hls-days">0<span class="hls-unit">j</span></div>
+          <div class="hls-lbl">DEPUIS L'INCIDENT</div>
+        </div>
       </div>
     </div>
 
@@ -74,16 +119,16 @@
 
       <!-- Boutons -->
       <div class="btns-block">
-        <button class="btn-primary" data-label="ENTRÉE"
+        <button class="btn-primary btn-anim" data-label="ENTRÉE" style="animation-delay:.1s"
                 onclick="App.startGame()">ENTRER DANS L'HÔTEL</button>
         <div class="btns-row">
-          <button class="btn-secondary" onclick="App.showScreen('rules')">
+          <button class="btn-secondary btn-anim" style="animation-delay:.25s" onclick="App.showScreen('rules')">
             <span class="btn-secondary-icon">📖</span> Règles du jeu
           </button>
-          <button class="btn-secondary" onclick="App.showScreen('scores')">
+          <button class="btn-secondary btn-anim" style="animation-delay:.4s" onclick="App.showScreen('scores')">
             <span class="btn-secondary-icon">🏆</span> Classement
           </button>
-          <button class="btn-secondary" onclick="App.showScreen('settings')">
+          <button class="btn-secondary btn-anim" style="animation-delay:.55s" onclick="App.showScreen('settings')">
             <span class="btn-secondary-icon">⚙</span> Options
           </button>
         </div>

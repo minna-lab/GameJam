@@ -1,4 +1,4 @@
-# ☢ HORIZON — Nothing is Safe
+# ☢ RADIATION TOWER — Nothing is Safe
 
 > *"Une catastrophe nucléaire. Un hôtel abandonné. Neuf étages pour survivre et découvrir la vérité."*
 
@@ -6,7 +6,7 @@
 
 ## 📋 Présentation
 
-**HORIZON — Nothing is Safe** est un jeu de survie en vue de dessus développé en **HTML/CSS/JavaScript pur**, sans moteur de jeu ni bibliothèque externe.
+**RADIATION TOWER — Nothing is Safe** est un jeu de survie en vue de dessus développé en **HTML/CSS/JavaScript pur**, sans moteur de jeu ni bibliothèque externe.
 
 Le jeu a été réalisé dans le cadre du **Dangerous Jam JS 2026**, dont le thème imposé était **"Nothing is Safe"**. Il respecte les contraintes de la jam : fichiers HTML/CSS/JS uniquement, condition de perte obligatoire, et système de scoring arcade.
 
