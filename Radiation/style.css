@@ -106,13 +106,13 @@ body::after{content:'';position:fixed;inset:0;background:var(--scanline);pointer
   font-size:clamp(5.5rem,10vw,9rem);
   line-height:.86;color:var(--paper);
   letter-spacing:-.01em;
-  animation:fadeslide .5s .3s ease both;
+  animation:fadeslide .5s .3s ease both, rad-flicker 4s 1.5s linear infinite;
 }
 .hero-title-outline{
   display:block;
   font-size:.52em;letter-spacing:.07em;
   -webkit-text-stroke:1px var(--rust);color:transparent;
-  animation:fadeslide .5s .5s ease both;
+  animation:fadeslide .5s .5s ease both, rad-flicker-outline 4s 1.7s linear infinite;
 }
 /* Tagline */
 .hero-tagline{
