@@ -1,148 +1,111 @@
-/* ═══════════════════════════════════════════════════════════════════
-   HORIZON — css/animations.css
-   All keyframe animations, transitions, and animated state classes
-═══════════════════════════════════════════════════════════════════ */
+/* ☢ HORIZON — animations.css */
 
-/* ── GRAIN TEXTURE ──────────────────────────────────────────────── */
-@keyframes grain {
-  0%  { background-position: 0 0 }
-  25% { background-position: -40px 20px }
-  50% { background-position: 30px -15px }
-  75% { background-position: -15px 35px }
+@keyframes fadeslide { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadein    { from{opacity:0} to{opacity:1} }
+@keyframes grain-shift {
+  0%{background-position:0 0}25%{background-position:-30px 15px}
+  50%{background-position:20px -10px}75%{background-position:-10px 25px}
+}
+@keyframes pulse-dot    { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.55)} }
+@keyframes warn-blink   { 0%,100%{opacity:1} 50%{opacity:.08} }
+@keyframes bar-crit     { from{opacity:1} to{opacity:.3} }
+@keyframes log-in       { from{opacity:0;transform:translateX(-5px)} to{opacity:1;transform:none} }
+@keyframes score-pop    { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-40px)} }
+@keyframes code-pulse   { 0%,100%{text-shadow:0 0 10px rgba(196,80,26,.3)} 50%{text-shadow:0 0 22px rgba(196,80,26,.7)} }
+@keyframes line-drift   { 0%,100%{opacity:.04} 50%{opacity:.09} }
+@keyframes shake        { 0%,100%{transform:none} 15%{transform:translate(-3px,-1px) rotate(-.4deg)} 30%{transform:translate(3px,1px) rotate(.4deg)} 45%{transform:translate(-2px,0)} 60%{transform:translate(2px,-1px)} 75%{transform:translate(-1px,2px)} 90%{transform:translate(1px,0)} }
+@keyframes geiger-pulse { 0%,100%{opacity:1;box-shadow:0 0 6px var(--bile-bright)} 50%{opacity:.1;box-shadow:none} }
+
+/* Home screen specific */
+@keyframes hero-number { 0%,100%{opacity:.015} 50%{opacity:.025} }
+@keyframes home-scan   { 0%{background-position:0 0} 100%{background-position:0 100%} }
+@keyframes home-flicker{ 0%,98%,100%{opacity:1} 99%{opacity:.6} }
+@keyframes rad-ring    { 0%{transform:scale(1);opacity:.4} 100%{transform:scale(2.2);opacity:0} }
+@keyframes rules-in    { from{opacity:0;transform:scale(.96) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+
+/* Titre principal — clignotement radiatif intense vert/orange fluo */
+@keyframes rad-flicker {
+  0%   { color:#e8dcc8; text-shadow: none; }
+
+  4%   { color:#ff6a00; text-shadow: 0 0 12px #ff6a00, 0 0 30px #ff4400; }
+  5%   { color:#e8dcc8; text-shadow: none; }
+  6%   { color:#39ff14; text-shadow: 0 0 20px #39ff14, 0 0 50px #00ff44; }
+  7%   { color:#e8dcc8; text-shadow: none; }
+  8%   { color:#ff6a00; text-shadow: 0 0 40px #ff6a00, 0 0 80px #ff2200, 0 0 120px rgba(255,100,0,.4); }
+  9%   { color:#e8dcc8; text-shadow: none; }
+
+  18%  { color:#e8dcc8; text-shadow: none; }
+  19%  { color:#39ff14; text-shadow: 0 0 25px #39ff14, 0 0 60px #00ff44, 0 0 100px rgba(57,255,20,.3); }
+  20%  { color:#e8dcc8; text-shadow: none; }
+  21%  { color:#ff6a00; text-shadow: 0 0 15px #ff6a00; }
+  22%  { color:#39ff14; text-shadow: 0 0 50px #39ff14, 0 0 90px #00ff44; }
+  23%  { color:#e8dcc8; text-shadow: none; }
+
+  35%  { color:#e8dcc8; text-shadow: none; }
+  36%  { color:#ff6a00; text-shadow: 0 0 35px #ff6a00, 0 0 70px #ff3300; }
+  36.5%{ color:#e8dcc8; text-shadow: none; }
+  37%  { color:#39ff14; text-shadow: 0 0 45px #39ff14, 0 0 85px #00ff44; }
+  37.5%{ color:#e8dcc8; text-shadow: none; }
+  38%  { color:#ff6a00; text-shadow: 0 0 60px #ff6a00, 0 0 100px #ff2200, 0 0 150px rgba(255,80,0,.5); }
+  39%  { color:#e8dcc8; text-shadow: none; }
+
+  55%  { color:#e8dcc8; text-shadow: none; }
+  56%  { color:#39ff14; text-shadow: 0 0 20px #39ff14, 0 0 55px #00ff44; }
+  56.5%{ color:#e8dcc8; text-shadow: none; }
+  57%  { color:#39ff14; text-shadow: 0 0 55px #39ff14, 0 0 110px #00ff44, 0 0 160px rgba(57,255,20,.4); }
+  58%  { color:#e8dcc8; text-shadow: none; }
+
+  72%  { color:#e8dcc8; text-shadow: none; }
+  73%  { color:#ff6a00; text-shadow: 0 0 30px #ff6a00; }
+  73.5%{ color:#39ff14; text-shadow: 0 0 40px #39ff14; }
+  74%  { color:#ff6a00; text-shadow: 0 0 70px #ff6a00, 0 0 120px #ff2200; }
+  74.5%{ color:#e8dcc8; text-shadow: none; }
+  75%  { color:#39ff14; text-shadow: 0 0 50px #39ff14, 0 0 100px #00ff44; }
+  76%  { color:#e8dcc8; text-shadow: none; }
+
+  90%  { color:#e8dcc8; text-shadow: none; }
+  91%  { color:#ff6a00; text-shadow: 0 0 25px #ff6a00, 0 0 60px #ff3300; }
+  92%  { color:#e8dcc8; text-shadow: none; }
+
+  100% { color:#e8dcc8; text-shadow: none; }
 }
 
-/* ── AMBIENT GRID ───────────────────────────────────────────────── */
-@keyframes grid-pan {
-  from { background-position: 0 0 }
-  to   { background-position: 0 48px }
+@keyframes rad-flicker-outline {
+  0%   { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+
+  4%   { -webkit-text-stroke:2px #ff6a00; text-shadow: 0 0 20px #ff6a00, 0 0 50px #ff3300; }
+  5%   { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+  6%   { -webkit-text-stroke:2px #39ff14; text-shadow: 0 0 25px #39ff14, 0 0 60px #00ff44; }
+  7%   { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+  8%   { -webkit-text-stroke:3px #ff6a00; text-shadow: 0 0 50px #ff6a00, 0 0 90px #ff2200; }
+  9%   { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+
+  18%  { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+  19%  { -webkit-text-stroke:2px #39ff14; text-shadow: 0 0 35px #39ff14, 0 0 80px #00ff44; }
+  20%  { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+  21%  { -webkit-text-stroke:2px #ff6a00; text-shadow: 0 0 20px #ff6a00; }
+  22%  { -webkit-text-stroke:3px #39ff14; text-shadow: 0 0 60px #39ff14, 0 0 100px #00ff44; }
+  23%  { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+
+  36%  { -webkit-text-stroke:2px #ff6a00; text-shadow: 0 0 40px #ff6a00, 0 0 80px #ff3300; }
+  36.5%{ -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+  37%  { -webkit-text-stroke:2px #39ff14; text-shadow: 0 0 50px #39ff14, 0 0 95px #00ff44; }
+  38%  { -webkit-text-stroke:3px #ff6a00; text-shadow: 0 0 70px #ff6a00, 0 0 130px #ff2200; }
+  39%  { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+
+  56%  { -webkit-text-stroke:2px #39ff14; text-shadow: 0 0 30px #39ff14, 0 0 65px #00ff44; }
+  56.5%{ -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+  57%  { -webkit-text-stroke:3px #39ff14; text-shadow: 0 0 65px #39ff14, 0 0 120px #00ff44; }
+  58%  { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+
+  73%  { -webkit-text-stroke:2px #ff6a00; text-shadow: 0 0 35px #ff6a00; }
+  73.5%{ -webkit-text-stroke:2px #39ff14; text-shadow: 0 0 45px #39ff14; }
+  74%  { -webkit-text-stroke:3px #ff6a00; text-shadow: 0 0 80px #ff6a00, 0 0 130px #ff2200; }
+  75%  { -webkit-text-stroke:3px #39ff14; text-shadow: 0 0 60px #39ff14, 0 0 110px #00ff44; }
+  76%  { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+
+  91%  { -webkit-text-stroke:2px #ff6a00; text-shadow: 0 0 30px #ff6a00, 0 0 70px #ff3300; }
+  92%  { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
+
+  100% { -webkit-text-stroke:1px #c4501a; text-shadow:none; }
 }
-
-/* ── HOME REVEAL ────────────────────────────────────────────────── */
-@keyframes reveal {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── BADGE PULSE ────────────────────────────────────────────────── */
-@keyframes badge-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: .3; transform: scale(.5); }
-}
-
-/* ── HP/RAD BARS CRITICAL ───────────────────────────────────────── */
-@keyframes bar-crit {
-  from { opacity: 1; }
-  to   { opacity: .3; }
-}
-
-/* ── HUD RADIATION WARNING ──────────────────────────────────────── */
-@keyframes warn-blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: .08; }
-}
-
-/* ── DOCUMENT CODE GLOW ─────────────────────────────────────────── */
-@keyframes code-glow {
-  0%, 100% { text-shadow: 0 0 10px rgba(196,80,26,.3); }
-  50%       { text-shadow: 0 0 22px rgba(196,80,26,.65); }
-}
-
-/* ── INVENTORY EQUIPPED GLOW ────────────────────────────────────── */
-@keyframes equip-glow {
-  0%, 100% { box-shadow: inset 0 0 4px rgba(143,170,26,.1); }
-  50%       { box-shadow: inset 0 0 12px rgba(143,170,26,.22); }
-}
-
-/* ── SCORE POPUP FLOAT ──────────────────────────────────────────── */
-@keyframes sc-float {
-  0%   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%,-220%) scale(.85); }
-}
-
-/* ── LOG LINE ENTRY ─────────────────────────────────────────────── */
-@keyframes log-in {
-  from { opacity: 0; transform: translateX(-4px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-/* ── SCREEN SHAKE ───────────────────────────────────────────────── */
-@keyframes shake {
-  0%, 100% { transform: none; }
-  15%  { transform: translate(-3px,-1px) rotate(-.4deg); }
-  30%  { transform: translate(3px,1px)  rotate(.4deg); }
-  45%  { transform: translate(-2px,0); }
-  60%  { transform: translate(2px,-1px); }
-  75%  { transform: translate(-1px,2px); }
-  90%  { transform: translate(1px,0); }
-}
-
-/* ── ELEVATOR PULSE ─────────────────────────────────────────────── */
-@keyframes elev-pulse {
-  0%, 100% { opacity: .07; }
-  50%       { opacity: .2; }
-}
-
-/* ── PLAYER RADIATION AURA ──────────────────────────────────────── */
-@keyframes rad-aura {
-  0%, 100% { opacity: .4; transform: scale(1); }
-  50%       { opacity: .7; transform: scale(1.08); }
-}
-
-/* ── DOOR HIGHLIGHT ─────────────────────────────────────────────── */
-@keyframes door-near {
-  0%, 100% { box-shadow: 0 0 6px rgba(196,80,26,.3); }
-  50%       { box-shadow: 0 0 14px rgba(196,80,26,.65); }
-}
-
-/* ── GEIGER DOT SPEED CLASSES ───────────────────────────────────── */
-.geiger-fast   { animation-duration: .08s !important; }
-.geiger-medium { animation-duration: .35s !important; }
-.geiger-slow   { animation-duration: 1.2s !important; }
-
-/* ── NOTIFICATION FADE ──────────────────────────────────────────── */
-@keyframes notif-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-#notif[style*="block"] { animation: notif-in .2s ease; }
-
-/* ── HOME BUTTON HOVER ──────────────────────────────────────────── */
-.btn-enter { transition: background .2s, transform .1s; }
-.btn-secondary { transition: border-color .18s, color .18s; }
-
-/* ── HUD BAR TRANSITIONS ────────────────────────────────────────── */
-.hud-bar-inner { transition: width .4s ease, background .4s ease; }
-
-/* ── MODAL OPEN ─────────────────────────────────────────────────── */
-@keyframes modal-in {
-  from { opacity: 0; transform: scale(.96); }
-  to   { opacity: 1; transform: scale(1); }
-}
-.modal-bg.open .modal-box,
-#modal-rules.open .rules-box,
-#pause-overlay.open .pause-box {
-  animation: modal-in .18s ease;
-}
-
-/* ── GAMEOVER TITLE PULSE (defeat) ─────────────────────────────── */
-@keyframes dead-pulse {
-  0%, 100% { text-shadow: 0 0 50px rgba(139,26,26,.5); }
-  50%       { text-shadow: 0 0 80px rgba(139,26,26,.85), 0 0 20px rgba(139,26,26,.4); }
-}
-.go-title.dead { animation: dead-pulse 2.8s ease-in-out infinite; }
-
-/* ── GAMEOVER TITLE GLOW (victory) ─────────────────────────────── */
-@keyframes win-pulse {
-  0%, 100% { text-shadow: 0 0 50px rgba(143,170,26,.4); }
-  50%       { text-shadow: 0 0 80px rgba(143,170,26,.7), 0 0 20px rgba(184,212,32,.4); }
-}
-.go-title.win { animation: win-pulse 2.2s ease-in-out infinite; }
-
-/* ── LOOT ITEM BOB ──────────────────────────────────────────────── */
-/* Applied dynamically in JS via Math.sin — no keyframe needed */
-
-/* ── VIGNETTE TRANSITION ────────────────────────────────────────── */
-#vignette { transition: background 1s ease; }
-
-/* ── CURSOR CLICK ───────────────────────────────────────────────── */
-#cursor { transition: transform .08s ease, width .15s ease, height .15s ease, border-color .2s ease; }
